@@ -14,19 +14,19 @@ import android.view.ViewGroup;
 
 import com.baccaventuri.flicking.R;
 
-public class MainFragment extends Fragment {
+public class SetsView extends Fragment {
 
     private MainViewModel mViewModel;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static SetsView newInstance() {
+        return new SetsView();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_sets_view, container, false);
     }
 
     @Override
