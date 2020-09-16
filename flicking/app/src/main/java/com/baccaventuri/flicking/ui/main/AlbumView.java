@@ -1,5 +1,6 @@
 package com.baccaventuri.flicking.ui.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -58,6 +59,16 @@ public class AlbumView extends Fragment {
         }
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_album);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_album);
+        toolbar.setTitle("Mendoza 2019");
     }
 
     @Override

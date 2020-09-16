@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pasarFoto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.AlbumView">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <androidx.recyclerview.widget.RecyclerView
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Álbum de Josue"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:visibility="visible" />
 
-</FrameLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android.id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="317dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/albumView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="pasarAPhotoFrag"
+        android:text="Pasar a Foto" />
+
+</LinearLayout>

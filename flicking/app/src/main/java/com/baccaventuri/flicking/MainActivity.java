@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.baccaventuri.flicking.ui.main.AlbumView;
 import com.baccaventuri.flicking.ui.main.PhotoView;
 import com.baccaventuri.flicking.ui.main.SetsView;
 
@@ -38,6 +39,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Create fragment and give it an argument for the selected article
         PhotoView newFragment = new PhotoView();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    public void pasarAalbumFrag (View view) {
+        Context context = getApplicationContext();
+
+        // Create fragment and give it an argument for the selected article
+        AlbumView newFragment = new AlbumView();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,

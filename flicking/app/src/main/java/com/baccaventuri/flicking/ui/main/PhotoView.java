@@ -65,7 +65,7 @@ public class PhotoView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_photo);
-        toolbar.setTitle("Mendoza 2019");
+        toolbar.setTitle("Cataratas");
     }
 
 

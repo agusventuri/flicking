@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/pasarFoto"
+    android:id="@+id/pasarAlbum"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,7 +14,7 @@
         android:maxLines="1"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="15 albumes"
+        android:text="Usuario"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:visibility="visible" />
 
@@ -34,7 +34,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="pasarAPhotoFrag"
-        android:text="Pasar a Foto" />
+        android:onClick="pasarAalbumFrag"
+        android:text="Pasar a Album" />
 
 </LinearLayout>

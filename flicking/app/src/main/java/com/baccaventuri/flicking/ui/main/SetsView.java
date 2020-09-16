@@ -53,8 +53,8 @@ public class SetsView extends Fragment {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.menu_album);
-        toolbar.setTitle("Álbum de Josue");
+        toolbar.inflateMenu(R.menu.menu_main);
+        toolbar.setTitle("Albumes de Josue");
     }
 
     @Override
