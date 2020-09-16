@@ -14,7 +14,7 @@
         android:maxLines="1"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="Álbum de Josue"
+        android:text="Vacaciones 2019"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:visibility="visible" />
 
