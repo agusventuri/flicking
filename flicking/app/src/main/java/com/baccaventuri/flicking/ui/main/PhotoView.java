@@ -1,7 +1,9 @@
 package com.baccaventuri.flicking.ui.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -56,6 +58,16 @@ public class PhotoView extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_photo);
+        toolbar.setTitle("Mendoza 2019");
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

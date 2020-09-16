@@ -2,6 +2,7 @@ package com.baccaventuri.flicking.ui.main;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -55,6 +56,8 @@ public class AlbumView extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_album);
     }
 
     @Override
