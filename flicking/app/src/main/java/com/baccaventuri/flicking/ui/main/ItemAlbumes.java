@@ -1,16 +1,23 @@
 package com.baccaventuri.flicking.ui.main;
 
+import android.media.Image;
+
 import java.util.ArrayList;
 
 public class ItemAlbumes {
     private String name;
+    private Image imagen;
 
     public ItemAlbumes(String name) {
-        name = name;
+        this.name = name;
+       // this.imagen = image;
     }
 
     public String getName() {
         return name;
+    }
+    public Image getImage() {
+        return imagen;
     }
 
     public static ArrayList<ItemAlbumes> createItemsList(int numItems) {

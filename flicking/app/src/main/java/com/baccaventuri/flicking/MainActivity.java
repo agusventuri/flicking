@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        myToolbar.setTitle("Pepeeeee");
+        myToolbar.setTitle("Álbumes de Josue");
         setSupportActionBar(myToolbar);
 
         if (savedInstanceState == null) {

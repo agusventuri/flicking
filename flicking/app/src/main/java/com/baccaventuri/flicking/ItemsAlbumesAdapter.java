@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,11 +68,8 @@ public class ItemsAlbumesAdapter extends
         public TextView nameTextView;
         public ImageView image;
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
+
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.album_item_name);
@@ -82,7 +78,6 @@ public class ItemsAlbumesAdapter extends
     }
     private List<ItemAlbumes> mItems;
 
-    // Pass in the contact array into the constructor
     public ItemsAlbumesAdapter(List<ItemAlbumes> items) {
         mItems = items;
     }
