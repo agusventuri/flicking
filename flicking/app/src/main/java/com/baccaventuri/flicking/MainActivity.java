@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +22,10 @@ import com.baccaventuri.flicking.ui.main.AlbumView;
 import com.baccaventuri.flicking.ui.main.PhotoView;
 import com.baccaventuri.flicking.ui.main.SetsView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import static androidx.core.content.FileProvider.getUriForFile;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
@@ -144,12 +148,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sharePhoto(MenuItem item) {
-        ImageView imageView = (ImageView) findViewById(R.id.photo);
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
         Uri imageUri = Uri.parse("android.resource://com.baccaventuri.flicking/drawable/montania");
+
+        File newFile = new File("android.resource://com.baccaventuri.flicking/drawable", "montania.png");
+        Uri contentUri = getUriForFile(getApplicationContext(), "com.mydomain.fileprovider", newFile);
+        //Uri imageUri = Uri.parse("https://i.pinimg.com/originals/91/c3/89/91c3894f5d1c0585cde7b66750a32062.png");
+//        ImageView imageView = (ImageView) findViewById(R.id.photo);
+//        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//        shareIntent.setType("image/*");
+//
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+//        startActivity(Intent.createChooser(shareIntent, "Share image using"));
+//        Toast.makeText(this, imageView.getDrawable().toString(), Toast.LENGTH_SHORT).show();
+
+//        Bitmap b =BitmapFactory.decodeResource(getResources(),R.drawable.montania);
+//        Intent share = new Intent(Intent.ACTION_SEND);
+//        share.setType("image/*");
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        b.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+//        //String path = MediaStore.Images.Media. insert(getContentResolver(), b, "Title", null);
+//        //Uri imageUri =  Uri.parse(path);
+//
+//        share.putExtra(Intent.EXTRA_STREAM, imageUri);
+//        startActivity(Intent.createChooser(share, "Select"));
+
+        Intent shareIntent = new Intent();
+
+        shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        startActivity(Intent.createChooser(shareIntent, "Share image using"));
-        Toast.makeText(this, imageView.getDrawable().toString(), Toast.LENGTH_SHORT).show();
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, "AAAAAAAAAAAAAAAAH"));
     }
 }
