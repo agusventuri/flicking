@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
-        String mensaje;
+        String sortingByText;
 
         // el usuario me pide que ahora filtre por fecha
         if (sortByDate) {
@@ -104,9 +104,13 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.getBoolean(SortPicsByNameKey, false)){
                 editor.putBoolean(SortPicsByNameKey, false);
                 editor.putBoolean(SortPicsByDateAscKey, true);
+                sortingByText = "Ordenado por fecha ascendente";
             } else {
                 editor.putBoolean(SortPicsByDateAscKey,
                         !sharedpreferences.getBoolean(SortPicsByDateAscKey, false));
+                sortingByText = !sharedpreferences.getBoolean(SortPicsByDateAscKey, false)
+                        ? "Ordenado por fecha ascendente"
+                        : "Ordenado por fecha descendente";
             }
         } else {
             // aca me esta pidiendo que filtre por nombre
@@ -115,11 +119,17 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.getBoolean(SortPicsByNameKey, false)) {
                 editor.putBoolean(SortPicsByNameAscKey,
                         !sharedpreferences.getBoolean(SortPicsByNameAscKey, false));
+                sortingByText = !sharedpreferences.getBoolean(SortPicsByNameAscKey, false)
+                        ? "Ordenado por nombre ascendente"
+                        : "Ordenado por nombre descendente";
             } else {
                 editor.putBoolean(SortPicsByNameKey, true);
                 editor.putBoolean(SortPicsByNameAscKey, true);
+                sortingByText = "Ordenado por nombre ascendente";
             }
         }
+
+        Toast.makeText(this, sortingByText, Toast.LENGTH_SHORT).show();
 
         // guardo los nuevos ajustes
         editor.apply();
