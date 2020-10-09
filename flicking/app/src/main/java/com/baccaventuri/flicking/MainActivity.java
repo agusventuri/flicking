@@ -104,11 +104,9 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.getBoolean(SortPicsByNameKey, false)){
                 editor.putBoolean(SortPicsByNameKey, false);
                 editor.putBoolean(SortPicsByDateAscKey, true);
-                mensaje = "filtrando por fecha asc";
             } else {
                 editor.putBoolean(SortPicsByDateAscKey,
                         !sharedpreferences.getBoolean(SortPicsByDateAscKey, false));
-                mensaje = "cambio de orden fecha";
             }
         } else {
             // aca me esta pidiendo que filtre por nombre
@@ -117,21 +115,14 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.getBoolean(SortPicsByNameKey, false)) {
                 editor.putBoolean(SortPicsByNameAscKey,
                         !sharedpreferences.getBoolean(SortPicsByNameAscKey, false));
-                mensaje = "cambio de orden name";
             } else {
                 editor.putBoolean(SortPicsByNameKey, true);
                 editor.putBoolean(SortPicsByNameAscKey, true);
-                mensaje = "filtrando por nombre asc";
             }
         }
 
         // guardo los nuevos ajustes
         editor.apply();
-
-        String toastText = sharedpreferences.getAll().toString() + "\n" + mensaje;
-
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
-
 
     }
 }
