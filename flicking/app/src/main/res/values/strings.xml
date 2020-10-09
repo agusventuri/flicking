@@ -11,4 +11,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="sortedByDateAsc">Ordenado por fecha ascendente</string>
+    <string name="sortedByDateDesc">Ordenado por fecha descendente</string>
+    <string name="sortedByNameAsc">Ordenado por nombre ascendente</string>
+    <string name="sortedByNameDesc">Ordenado por nombre descendente</string>
+    <string name="filtro_nombre">Filtro nombre</string>
+    <string name="filtro_fecha">Filtro fecha</string>
 </resources>

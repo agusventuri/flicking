@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeSortingMethod (MenuItem item) {
         boolean sortByDate = true;
-        if (item.getTitle().equals("Filtro nombre")) {
+        if (item.getTitle().equals(getString(R.string.filtro_nombre))) {
             sortByDate = false;
         }
 
@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.getBoolean(SortPicsByNameKey, false)){
                 editor.putBoolean(SortPicsByNameKey, false);
                 editor.putBoolean(SortPicsByDateAscKey, true);
-                sortingByText = "Ordenado por fecha ascendente";
+                sortingByText = getString(R.string.sortedByDateAsc);
             } else {
                 editor.putBoolean(SortPicsByDateAscKey,
                         !sharedpreferences.getBoolean(SortPicsByDateAscKey, false));
                 sortingByText = !sharedpreferences.getBoolean(SortPicsByDateAscKey, false)
-                        ? "Ordenado por fecha ascendente"
-                        : "Ordenado por fecha descendente";
+                        ? getString(R.string.sortedByDateAsc)
+                        : getString(R.string.sortedByDateDesc);
             }
         } else {
             // aca me esta pidiendo que filtre por nombre
@@ -120,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean(SortPicsByNameAscKey,
                         !sharedpreferences.getBoolean(SortPicsByNameAscKey, false));
                 sortingByText = !sharedpreferences.getBoolean(SortPicsByNameAscKey, false)
-                        ? "Ordenado por nombre ascendente"
-                        : "Ordenado por nombre descendente";
+                        ? getString(R.string.sortedByNameAsc)
+                        : getString(R.string.sortedByNameDesc);
             } else {
                 editor.putBoolean(SortPicsByNameKey, true);
                 editor.putBoolean(SortPicsByNameAscKey, true);
-                sortingByText = "Ordenado por nombre ascendente";
+                sortingByText = getString(R.string.sortedByNameAsc);
             }
         }
 

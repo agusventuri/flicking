@@ -4,13 +4,13 @@
 
     <item android:id="@+id/filter_name"
         android:icon="@drawable/ic_sort_by_alpha_white_24dp"
-        android:title="Filtro nombre"
+        android:title="@string/filtro_nombre"
         android:onClick="changeSortingMethod"
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/filter_date"
         android:icon="@drawable/ic_calendar_today_white_24dp"
-        android:title="Filtro fecha"
+        android:title="@string/filtro_fecha"
         android:onClick="changeSortingMethod"
         app:showAsAction="ifRoom" />
 
