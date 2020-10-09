@@ -6,7 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +17,12 @@ import com.baccaventuri.flicking.ui.main.PhotoView;
 import com.baccaventuri.flicking.ui.main.SetsView;
 
 public class MainActivity extends AppCompatActivity {
+    SharedPreferences sharedpreferences;
+    public static final String sortPref = "sortPref";
+    public static final String SortPicsByNameKey = "SortPicsByName";
+    public static final String SortPicsByNameAscKey = "SortPicsByNameAsc";
+    public static final String SortPicsByDateAscKey = "SortPicsByDateAsc";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         myToolbar.setTitle("Álbumes de Josue");
         setSupportActionBar(myToolbar);
+
+        sharedpreferences = getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+
+        if (!sharedpreferences.contains(SortPicsByNameKey) ||
+                !sharedpreferences.contains(SortPicsByNameAscKey) ||
+                !sharedpreferences.contains(SortPicsByDateAscKey)){
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putBoolean(SortPicsByNameKey, true);
+            editor.putBoolean(SortPicsByNameAscKey, true);
+            editor.putBoolean(SortPicsByDateAscKey, false);
+            editor.apply();
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -62,5 +83,55 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
+    }
+
+    public void changeSortingMethod (MenuItem item) {
+        boolean sortByDate = true;
+        if (item.getTitle().equals("Filtro nombre")) {
+            sortByDate = false;
+        }
+
+        sharedpreferences = getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        String mensaje;
+
+        // el usuario me pide que ahora filtre por fecha
+        if (sortByDate) {
+            // si actualmente el filtro por nombre esta activo, lo cambio a filtro por fecha
+            // sino, cambio el orden de filtrado de fecha
+            if (sharedpreferences.getBoolean(SortPicsByNameKey, false)){
+                editor.putBoolean(SortPicsByNameKey, false);
+                editor.putBoolean(SortPicsByDateAscKey, true);
+                mensaje = "filtrando por fecha asc";
+            } else {
+                editor.putBoolean(SortPicsByDateAscKey,
+                        !sharedpreferences.getBoolean(SortPicsByDateAscKey, false));
+                mensaje = "cambio de orden fecha";
+            }
+        } else {
+            // aca me esta pidiendo que filtre por nombre
+            // si actualmente el filtro por nombre esta activo, cambio el orden de filtrado
+            // sino, cambio el filtro a filtrado por nombre
+            if (sharedpreferences.getBoolean(SortPicsByNameKey, false)) {
+                editor.putBoolean(SortPicsByNameAscKey,
+                        !sharedpreferences.getBoolean(SortPicsByNameAscKey, false));
+                mensaje = "cambio de orden name";
+            } else {
+                editor.putBoolean(SortPicsByNameKey, true);
+                editor.putBoolean(SortPicsByNameAscKey, true);
+                mensaje = "filtrando por nombre asc";
+            }
+        }
+
+        // guardo los nuevos ajustes
+        editor.apply();
+
+        String toastText = sharedpreferences.getAll().toString() + "\n" + mensaje;
+
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+
+
     }
 }
