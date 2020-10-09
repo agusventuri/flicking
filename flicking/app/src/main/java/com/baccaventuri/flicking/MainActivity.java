@@ -8,8 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -143,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void sharePhoto(MenuItem item) {
         ImageView imageView = (ImageView) findViewById(R.id.photo);
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND); shareIntent.setType("image/jpg");
-        final File photoFile = new File(imageView.getDrawable().toString(), "montania.png");
-        Uri uri = Uri.parse(imageView.getDrawable().toString());
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        Uri imageUri = Uri.parse("android.resource://com.baccaventuri.flicking/drawable/montania");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         startActivity(Intent.createChooser(shareIntent, "Share image using"));
         Toast.makeText(this, imageView.getDrawable().toString(), Toast.LENGTH_SHORT).show();
     }
