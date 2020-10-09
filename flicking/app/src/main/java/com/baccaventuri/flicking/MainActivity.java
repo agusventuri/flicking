@@ -6,15 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.baccaventuri.flicking.ui.main.AlbumView;
 import com.baccaventuri.flicking.ui.main.PhotoView;
 import com.baccaventuri.flicking.ui.main.SetsView;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
@@ -134,5 +139,15 @@ public class MainActivity extends AppCompatActivity {
         // guardo los nuevos ajustes
         editor.apply();
 
+    }
+
+    public void sharePhoto(MenuItem item) {
+        ImageView imageView = (ImageView) findViewById(R.id.photo);
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND); shareIntent.setType("image/jpg");
+        final File photoFile = new File(imageView.getDrawable().toString(), "montania.png");
+        Uri uri = Uri.parse(imageView.getDrawable().toString());
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(shareIntent, "Share image using"));
+        Toast.makeText(this, imageView.getDrawable().toString(), Toast.LENGTH_SHORT).show();
     }
 }

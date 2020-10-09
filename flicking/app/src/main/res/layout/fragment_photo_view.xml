@@ -17,11 +17,11 @@
         android:text="@string/hello_blank_fragment" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         tools:layout_editor_absoluteY="206dp"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/montania" />
 
     <TextView
         android:id="@+id/description"

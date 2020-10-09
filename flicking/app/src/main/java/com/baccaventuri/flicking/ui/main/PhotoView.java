@@ -1,16 +1,23 @@
 package com.baccaventuri.flicking.ui.main;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.baccaventuri.flicking.R;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,4 +82,6 @@ public class PhotoView extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_photo_view, container, false);
     }
+
+
 }
