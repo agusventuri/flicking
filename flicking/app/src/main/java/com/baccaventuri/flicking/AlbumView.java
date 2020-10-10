@@ -87,6 +87,16 @@ public class AlbumView extends Fragment {
         animalNames.add("Camel");
         animalNames.add("Sheep");
         animalNames.add("Goat");
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
 
         albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new LinearLayoutManager(getContext());

@@ -2,23 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".PhotoView">
 
     <ImageView
         android:id="@+id/album_item_imageView"
         android:layout_width="match_parent"
-        android:layout_height="514dp"
-        tools:layout_editor_absoluteY="206dp"
-        tools:src="@tools:sample/avatars" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/montania" />
 
     <TextView
         android:id="@+id/album_item_name"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/hello_blank_fragment" />
 
 </LinearLayout>
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    android:padding="10dp">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/album_item_name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="20sp"/>-->
+
+<!--</LinearLayout>-->
