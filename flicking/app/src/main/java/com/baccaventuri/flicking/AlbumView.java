@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +98,20 @@ public class AlbumView extends Fragment {
         animalNames.add("Camel");
         animalNames.add("Sheep");
         animalNames.add("Goat");
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
+
 
         albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         albumRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new AlbumsAdapter(getContext(), animalNames);
         albumRecyclerView.setAdapter(mAdapter);
