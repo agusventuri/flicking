@@ -11,8 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baccaventuri.flicking.ui.main.ItemAlbumes;
-
 import java.util.List;
 
 // Create the basic adapter extending from RecyclerView.Adapter

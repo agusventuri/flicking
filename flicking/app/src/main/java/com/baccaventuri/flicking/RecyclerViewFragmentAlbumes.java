@@ -1,11 +1,8 @@
 
 package com.baccaventuri.flicking;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.baccaventuri.flicking.ui.main.ItemAlbumes;
 
 import java.util.ArrayList;
 

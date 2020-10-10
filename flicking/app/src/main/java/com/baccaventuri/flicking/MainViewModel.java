@@ -1,4 +1,4 @@
-package com.baccaventuri.flicking.ui.main;
+package com.baccaventuri.flicking;
 
 import androidx.lifecycle.ViewModel;
 

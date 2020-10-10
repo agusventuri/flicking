@@ -1,4 +1,4 @@
-package com.baccaventuri.flicking.ui.main;
+package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,14 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.baccaventuri.flicking.R;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AlbumView#newInstance} factory method to
+ * Use the {@link PhotoView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlbumView extends Fragment {
+public class PhotoView extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +26,7 @@ public class AlbumView extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AlbumView() {
+    public PhotoView() {
         // Required empty public constructor
     }
 
@@ -38,11 +36,11 @@ public class AlbumView extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AlbumView.
+     * @return A new instance of fragment PhotoView.
      */
     // TODO: Rename and change types and number of parameters
-    public static AlbumView newInstance(String param1, String param2) {
-        AlbumView fragment = new AlbumView();
+    public static PhotoView newInstance(String param1, String param2) {
+        PhotoView fragment = new PhotoView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,24 +55,24 @@ public class AlbumView extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_album);
     }
-
     @SuppressLint("RestrictedApi")
     @Override
     public void onResume() {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.menu_album);
-        toolbar.setTitle("Mendoza 2019");
+        toolbar.inflateMenu(R.menu.menu_photo);
+        toolbar.setTitle("Montaña");
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album_view, container, false);
+        return inflater.inflate(R.layout.fragment_photo_view, container, false);
     }
+
+
 }

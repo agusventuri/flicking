@@ -1,4 +1,4 @@
-package com.baccaventuri.flicking.ui.main;
+package com.baccaventuri.flicking;
 
 import android.media.Image;
 
