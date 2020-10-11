@@ -8,22 +8,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baccaventuri.flicking.Models.Photo;
+
 import java.util.List;
 
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHolder> {
-    private List<String> mData;
+    private List<Photo> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    AlbumsAdapter(Context context, List<String> data) {
+    AlbumsAdapter(Context context, List<Photo> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-    }
-    
-    // convenience method for getting data at click position
-    public String getItem(int id) {
-        return mData.get(id);
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -52,8 +49,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        Photo photo = mData.get(position);
+        holder.myTextView.setText(photo.getTitle());
     }
 
     // total number of rows

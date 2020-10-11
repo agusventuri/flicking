@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -14,7 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.baccaventuri.flicking.Models.Photo;
+import com.baccaventuri.flicking.Models.Photoset;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +41,6 @@ public class AlbumView extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -36,18 +48,15 @@ public class AlbumView extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private Gson gson;
+    private static RequestQueue queue;
+    private static ImageLoader imageLoader;
+    private List<Photo> photos;
+
     public AlbumView() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AlbumView.
-     */
     // TODO: Rename and change types and number of parameters
     public static AlbumView newInstance(String param1, String param2) {
         AlbumView fragment = new AlbumView();
@@ -69,10 +78,6 @@ public class AlbumView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_album);
     }
 
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(), "You clicked " + mAdapter.getItemId(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-    }
-
     @SuppressLint("RestrictedApi")
     @Override
     public void onResume() {
@@ -82,40 +87,34 @@ public class AlbumView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle("Mendoza 2019");
 
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+        gson = gsonBuilder.create();
 
-
-        albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        albumRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new AlbumsAdapter(getContext(), animalNames);
-        albumRecyclerView.setAdapter(mAdapter);
+        String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=72157628042948461&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotosLoaded, onGetPhotosError);
+        Flicking.getSharedQueue().add(request);
     }
+
+    private final Response.Listener<String> onGetPhotosLoaded = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            Photoset photoset = gson.fromJson(response, Photoset.class);
+            List<Photo> photos = photoset.getPhotoset().getPhoto();
+            albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
+            layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            albumRecyclerView.setLayoutManager(layoutManager);
+            mAdapter = new AlbumsAdapter(getContext(), photos);
+            albumRecyclerView.setAdapter(mAdapter);
+        }
+    };
+
+    private final Response.ErrorListener onGetPhotosError = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
