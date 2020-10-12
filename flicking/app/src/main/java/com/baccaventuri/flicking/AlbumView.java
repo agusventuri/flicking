@@ -49,8 +49,6 @@ public class AlbumView extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
 
     private Gson gson;
-    private static RequestQueue queue;
-    private static ImageLoader imageLoader;
     private List<Photo> photos;
 
     public AlbumView() {
@@ -100,7 +98,17 @@ public class AlbumView extends Fragment {
         @Override
         public void onResponse(String response) {
             Photoset photoset = gson.fromJson(response, Photoset.class);
-            List<Photo> photos = photoset.getPhotoset().getPhoto();
+            photos = photoset.getPhotoset().getPhoto();
+            for (Photo photo: photos) {
+                photo.fetchBitmap();
+            }
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
             layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             albumRecyclerView.setLayoutManager(layoutManager);

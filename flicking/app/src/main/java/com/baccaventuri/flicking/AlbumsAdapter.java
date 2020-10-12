@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,10 +27,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
+        ImageView myImageView;
 
         MyViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.album_item_name);
+            myImageView = itemView.findViewById(R.id.album_item_imageView);
             itemView.setOnClickListener(this);
         }
 
@@ -51,6 +54,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Photo photo = mData.get(position);
         holder.myTextView.setText(photo.getTitle());
+        holder.myImageView.setImageBitmap(photo.getBitmap());
     }
 
     // total number of rows
