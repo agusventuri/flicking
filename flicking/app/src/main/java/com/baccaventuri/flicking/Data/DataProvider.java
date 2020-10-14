@@ -24,9 +24,12 @@ public class DataProvider {
 
     private Gson gson;
     private AlbumsAdapter mAlbumsAdapter;
+    private Toolbar albumToolbar;
 
-    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter) {
+    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter, Toolbar albumToolbar) {
         this.mAlbumsAdapter = mAlbumsAdapter;
+        this.albumToolbar = albumToolbar;
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
@@ -44,6 +47,7 @@ public class DataProvider {
 
             mAlbumsAdapter.updateDataset(photos);
             mAlbumsAdapter.notifyDataSetChanged();
+            albumToolbar.setTitle(photoset.getPhotoset().getTitle());
         }
     };
 

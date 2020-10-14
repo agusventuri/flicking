@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AlbumView#newInstance} factory method to
+ * Use the {@link AlbumView} factory method to
  * create an instance of this fragment.
  */
 public class AlbumView extends Fragment {
@@ -90,7 +90,7 @@ public class AlbumView extends Fragment {
         albumRecyclerView.setAdapter(mAdapter);
 
         DataProvider dataProvider = new DataProvider();
-        dataProvider.loadPhotoset(mAdapter);
+        dataProvider.loadPhotoset(mAdapter, toolbar);
     }
 
     @Override
