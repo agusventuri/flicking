@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
+import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,6 +17,8 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -52,6 +55,8 @@ public class Photo {
     private Gson gson;
     private List<Size> size;
     private Bitmap bitmap;
+    private AlbumsAdapter mAdapter;
+    private int position;
 
     public String getId() {
         return id;
@@ -125,7 +130,10 @@ public class Photo {
         this.isfamily = isfamily;
     }
 
-    public void fetchBitmap() {
+    public void fetchBitmap(AlbumsAdapter mAdapter, int position) {
+        this.mAdapter = mAdapter;
+        this.position = position;
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
@@ -160,6 +168,7 @@ public class Photo {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         bitmap = response.getBitmap();
+                        mAdapter.notifyItemChanged(position);
                     }
                 }
             });

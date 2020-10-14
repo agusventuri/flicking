@@ -55,6 +55,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         Photo photo = mData.get(position);
         holder.myTextView.setText(photo.getTitle());
         holder.myImageView.setImageBitmap(photo.getBitmap());
+        if (photo.getBitmap() == null){
+            photo.fetchBitmap(this, position);
+        }
     }
 
     // total number of rows
@@ -62,8 +65,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     public int getItemCount() {
         return mData.size();
     }
-
-
 
     // allows clicks events to be caught
     void setClickListener(ItemClickListener itemClickListener) {
