@@ -81,7 +81,7 @@ public class AlbumView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
-        toolbar.setTitle("Mendoza 2019");
+        toolbar.setTitle("Album");
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
@@ -97,6 +97,9 @@ public class AlbumView extends Fragment {
         public void onResponse(String response) {
             Photoset photoset = gson.fromJson(response, Photoset.class);
             photos = photoset.getPhotoset().getPhoto();
+
+            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            toolbar.setTitle(photoset.getPhotoset().getTitle());
 
             albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
             layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
