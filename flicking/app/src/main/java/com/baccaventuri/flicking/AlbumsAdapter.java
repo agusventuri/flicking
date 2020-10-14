@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.baccaventuri.flicking.Models.Photo;
@@ -19,9 +20,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    AlbumsAdapter(Context context, List<Photo> data) {
+    AlbumsAdapter(Context context, List<Photo> data, ItemClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        setClickListener(itemClickListener);
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -29,16 +31,18 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         TextView myTextView;
         ImageView myImageView;
 
-        MyViewHolder(View itemView) {
+
+        public MyViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.album_item_name);
-            myImageView = itemView.findViewById(R.id.album_item_imageView);
+            myImageView = itemView.findViewById(R.id.album_item_image);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            //if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -55,6 +59,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         Photo photo = mData.get(position);
         holder.myTextView.setText(photo.getTitle());
         holder.myImageView.setImageBitmap(photo.getBitmap());
+
         if (photo.getBitmap() == null){
             photo.fetchBitmap(this, position);
         }
@@ -73,6 +78,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
+        //void onItemClick(View view, int position);
         void onItemClick(View view, int position);
     }
 }

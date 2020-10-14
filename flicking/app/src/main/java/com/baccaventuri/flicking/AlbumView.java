@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -14,18 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Photoset;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -50,13 +46,15 @@ public class AlbumView extends Fragment {
 
     private Gson gson;
     private List<Photo> photos;
+    MainActivity activity;
 
-    public AlbumView() {
+    public AlbumView(MainActivity activity) {
         // Required empty public constructor
+        this.activity = activity;
     }
 
     // TODO: Rename and change types and number of parameters
-    public static AlbumView newInstance(String param1, String param2) {
+   /* public static AlbumView newInstance(String param1, String param2) {
         AlbumView fragment = new AlbumView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -64,7 +62,7 @@ public class AlbumView extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +101,8 @@ public class AlbumView extends Fragment {
             albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
             layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             albumRecyclerView.setLayoutManager(layoutManager);
-            mAdapter = new AlbumsAdapter(getContext(), photos);
+            mAdapter = new AlbumsAdapter(getContext(), photos,activity);
+
             albumRecyclerView.setAdapter(mAdapter);
         }
     };

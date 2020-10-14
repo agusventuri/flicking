@@ -3,19 +3,24 @@ package com.baccaventuri.flicking;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AlbumsAdapter.ItemClickListener {
     SharedPreferences sharedpreferences;
     public static final String sortPref = "sortPref";
     public static final String SortPicsByNameKey = "SortPicsByName";
@@ -52,13 +57,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void pasarAPhotoFrag (View view) {
-        Context context = getApplicationContext();
-        CharSequence text = "Vamo vieja!";
-        int duration = Toast.LENGTH_SHORT;
+    public void pasarAPhotoFrag (String name, Drawable image) {
 
         // Create fragment and give it an argument for the selected article
-        PhotoView newFragment = new PhotoView();
+        PhotoView newFragment = new PhotoView(name,image);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         // Create fragment and give it an argument for the selected article
-        AlbumView newFragment = new AlbumView();
+        AlbumView newFragment = new AlbumView(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -146,5 +148,15 @@ public class MainActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("image/*");
         startActivity(Intent.createChooser(shareIntent, "Compartir foto"));
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //RecyclerView.ViewHolder child = view.findViewHolderForAdapterPosition(position);
+        //pasarAPhotoFrag(child.findViewById(R.id.name).toString(),child.findViewById(R.id.description).toString());
+        TextView name = view.findViewById(R.id.album_item_name);
+        ImageView image = view.findViewById(R.id.album_item_image);
+        Drawable img = image.getDrawable();
+        pasarAPhotoFrag(name.getText().toString(),img);
     }
 }

@@ -10,18 +10,12 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
-
     <ImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        tools:layout_editor_absoluteY="206dp"
-        android:src="@drawable/montania" />
+        android:src="@drawable/montania"
+        tools:layout_editor_absoluteY="206dp" />
 
     <TextView
         android:id="@+id/description"
