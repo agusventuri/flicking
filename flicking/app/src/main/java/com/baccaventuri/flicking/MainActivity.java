@@ -145,6 +145,6 @@ public class MainActivity extends AppCompatActivity {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, "AAAAAAAAAAAAAAAAH"));
+        startActivity(Intent.createChooser(shareIntent, "Compartir foto"));
     }
 }

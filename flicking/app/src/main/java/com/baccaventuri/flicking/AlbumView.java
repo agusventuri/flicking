@@ -99,15 +99,20 @@ public class AlbumView extends Fragment {
         public void onResponse(String response) {
             Photoset photoset = gson.fromJson(response, Photoset.class);
             photos = photoset.getPhotoset().getPhoto();
-            for (Photo photo: photos) {
+
+            PhotoThread thred = new PhotoThread(getActivity(),photos);
+            thred.run();
+
+           /* for (Photo photo: photos) {
+
                 photo.fetchBitmap();
             }
-
-            try {
+*/
+/*            try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
             layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
