@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Photoset;
 import com.google.gson.Gson;
@@ -44,7 +45,6 @@ public class AlbumView extends Fragment {
     private AlbumsAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private Gson gson;
     private List<Photo> photos;
     MainActivity activity;
 
@@ -83,39 +83,15 @@ public class AlbumView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle("Album");
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
+        albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        albumRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new AlbumsAdapter(getContext(), photos, activity);
+        albumRecyclerView.setAdapter(mAdapter);
 
-        String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=72157628042948461&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
-        StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotosLoaded, onGetPhotosError);
-        Flicking.getSharedQueue().add(request);
+        DataProvider dataProvider = new DataProvider();
+        dataProvider.loadPhotoset(mAdapter);
     }
-
-    private final Response.Listener<String> onGetPhotosLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            Photoset photoset = gson.fromJson(response, Photoset.class);
-            photos = photoset.getPhotoset().getPhoto();
-
-            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-            toolbar.setTitle(photoset.getPhotoset().getTitle());
-
-            albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
-            layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            albumRecyclerView.setLayoutManager(layoutManager);
-            mAdapter = new AlbumsAdapter(getContext(), photos,activity);
-
-            albumRecyclerView.setAdapter(mAdapter);
-        }
-    };
-
-    private final Response.ErrorListener onGetPhotosError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

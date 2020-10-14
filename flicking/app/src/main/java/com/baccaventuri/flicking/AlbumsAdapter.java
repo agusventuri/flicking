@@ -68,12 +68,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     // total number of rows
     @Override
     public int getItemCount() {
+        if (mData == null){
+            return 0;
+        }
         return mData.size();
     }
 
     // allows clicks events to be caught
     void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
+    }
+
+    public void updateDataset (List<Photo> mData) {
+        this.mData = mData;
     }
 
     // parent activity will implement this method to respond to click events
