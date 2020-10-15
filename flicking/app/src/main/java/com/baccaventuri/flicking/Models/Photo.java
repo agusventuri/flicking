@@ -11,19 +11,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+
+@Entity(tableName = "Photos")
 public class Photo {
 
+    @PrimaryKey
+    @NonNull
     @SerializedName("id")
     @Expose
     private String id;
@@ -34,9 +35,10 @@ public class Photo {
     @Expose
     private String isprimary;
 
-    private Gson gson;
     private List<Size> size;
     private Bitmap bitmap;
+
+    @Ignore
     private AlbumsAdapter mAdapter;
 
     public String getId() {
@@ -66,10 +68,6 @@ public class Photo {
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
-
         StringBuilder url = new StringBuilder();
         url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=");
         url.append("6e69c76253dbd558d5bcb0e797676a69");
@@ -84,6 +82,9 @@ public class Photo {
     private final Response.Listener<String> onGetSizesLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+            Gson gson = gsonBuilder.create();
             Sizes sizes = gson.fromJson(response, Sizes.class);
             size = sizes.getSizes().getSize();
 
