@@ -59,10 +59,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         Photo photo = mData.get(position);
         holder.myTextView.setText(photo.getTitle());
         holder.myImageView.setImageBitmap(photo.getBitmap());
-
-        if (photo.getBitmap() == null){
-            photo.fetchBitmap(this, position);
-        }
     }
 
     // total number of rows

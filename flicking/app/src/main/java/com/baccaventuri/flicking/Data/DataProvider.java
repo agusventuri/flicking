@@ -44,9 +44,14 @@ public class DataProvider {
         public void onResponse(String response) {
             Photoset photoset = gson.fromJson(response, Photoset.class);
             List<Photo> photos = photoset.getPhotoset().getPhoto();
-
             mAlbumsAdapter.updateDataset(photos);
-            mAlbumsAdapter.notifyDataSetChanged();
+
+            for (Photo photo:photos) {
+                if (photo.getBitmap() == null) {
+                    photo.fetchBitmap(mAlbumsAdapter);
+                }
+            }
+
             albumToolbar.setTitle(photoset.getPhotoset().getTitle());
         }
     };

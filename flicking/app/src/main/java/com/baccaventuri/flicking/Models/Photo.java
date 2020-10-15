@@ -56,7 +56,6 @@ public class Photo {
     private List<Size> size;
     private Bitmap bitmap;
     private AlbumsAdapter mAdapter;
-    private int position;
 
     public String getId() {
         return id;
@@ -130,9 +129,8 @@ public class Photo {
         this.isfamily = isfamily;
     }
 
-    public void fetchBitmap(AlbumsAdapter mAdapter, int position) {
+    public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
-        this.position = position;
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
@@ -168,7 +166,7 @@ public class Photo {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         bitmap = response.getBitmap();
-                        mAdapter.notifyItemChanged(position);
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
             });
