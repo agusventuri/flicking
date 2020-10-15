@@ -1,7 +1,6 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -12,17 +11,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Photo;
-import com.baccaventuri.flicking.Models.Photoset;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -89,7 +80,7 @@ public class AlbumView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle("Album");
 
-        albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
+        albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         albumRecyclerView.setLayoutManager(layoutManager);
         albumRecyclerView.setAdapter(mAdapter);

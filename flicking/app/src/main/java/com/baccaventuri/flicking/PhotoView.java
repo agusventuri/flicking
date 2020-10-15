@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baccaventuri.flicking.Models.Photo;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PhotoView#newInstance} factory method to
+ * Use the {@link PhotoView} factory method to
  * create an instance of this fragment.
  */
 public class PhotoView extends Fragment {
@@ -28,30 +30,12 @@ public class PhotoView extends Fragment {
     // TODO: Rename and change types of parameters
     private String name;
     private Drawable image;
+    private Photo photo;
 
-    public PhotoView(String name, Drawable image) {
+    public PhotoView(Photo photo) {
         // Required empty public constructor
-        this.name = name;
-        this.image = image;
+        this.photo = photo;
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param name Parameter 1.
-     * @param image Parameter 2.
-     * @return A new instance of fragment PhotoView.
-     */
-    // TODO: Rename and change types and number of parameters
-/*    public static PhotoView newInstance(String name, Drawable image) {
-        PhotoView fragment = new PhotoView(name,image);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, name);
-        args.putString(ARG_PARAM2, image);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,12 +53,13 @@ public class PhotoView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_photo);
-        toolbar.setTitle(name);
+        toolbar.setTitle(photo.getTitle());
         //lleno datos foto
         //TextView description = (TextView) getActivity().findViewById(R.id.description);
         //description.setText();
-        ImageView photo = (ImageView) getActivity().findViewById(R.id.photo);
-        photo.setImageDrawable(image);
+        ImageView imageView = (ImageView) getActivity().findViewById(R.id.photo);
+//        imageView.setImageDrawable(photo.getBitmap());
+        imageView.setImageBitmap(photo.getBitmap());
     }
 
 

@@ -1,11 +1,13 @@
 package com.baccaventuri.flicking;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.baccaventuri.flicking.Models.Photo;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHolder> {
     private List<Photo> mData;
@@ -42,7 +46,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         @Override
         public void onClick(View view) {
             //if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-            mClickListener.onItemClick(view, getAdapterPosition());
+            mClickListener.onItemClick(mData.get(getAdapterPosition()));
         }
     }
 
@@ -79,9 +83,13 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         this.mData = mData;
     }
 
+    public Photo getItem (int pos) {
+        return mData.get(pos);
+    }
+
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         //void onItemClick(View view, int position);
-        void onItemClick(View view, int position);
+        void onItemClick(Photo photo);
     }
 }

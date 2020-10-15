@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baccaventuri.flicking.Models.Photo;
+
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.ItemClickListener {
@@ -57,10 +59,12 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Ite
     }
 
 
-    public void pasarAPhotoFrag (String name, Drawable image) {
+//    public void pasarAPhotoFrag (String name, Drawable image) {
+    public void pasarAPhotoFrag (Photo photo) {
 
         // Create fragment and give it an argument for the selected article
-        PhotoView newFragment = new PhotoView(name,image);
+//        PhotoView newFragment = new PhotoView(name,image);
+        PhotoView newFragment = new PhotoView(photo);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -151,12 +155,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Ite
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        //RecyclerView.ViewHolder child = view.findViewHolderForAdapterPosition(position);
-        //pasarAPhotoFrag(child.findViewById(R.id.name).toString(),child.findViewById(R.id.description).toString());
-        TextView name = view.findViewById(R.id.album_item_name);
-        ImageView image = view.findViewById(R.id.album_item_image);
-        Drawable img = image.getDrawable();
-        pasarAPhotoFrag(name.getText().toString(),img);
+    public void onItemClick(Photo photo) {
+        pasarAPhotoFrag(photo);
     }
 }
