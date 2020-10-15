@@ -72,6 +72,12 @@ public class AlbumView extends Fragment {
         }
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_album);
+
+
+        mAdapter = new AlbumsAdapter(getContext(), photos, activity);
+
+        DataProvider dataProvider = new DataProvider();
+        dataProvider.loadPhotoset(mAdapter, toolbar);
     }
 
     @SuppressLint("RestrictedApi")
@@ -86,11 +92,7 @@ public class AlbumView extends Fragment {
         albumRecyclerView = (RecyclerView) getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         albumRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new AlbumsAdapter(getContext(), photos, activity);
         albumRecyclerView.setAdapter(mAdapter);
-
-        DataProvider dataProvider = new DataProvider();
-        dataProvider.loadPhotoset(mAdapter, toolbar);
     }
 
     @Override
