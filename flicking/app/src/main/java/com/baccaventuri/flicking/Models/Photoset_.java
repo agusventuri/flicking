@@ -21,18 +21,6 @@ public class Photoset_ {
     @SerializedName("photo")
     @Expose
     private List<Photo> photo = null;
-    @SerializedName("page")
-    @Expose
-    private String page;
-    @SerializedName("per_page")
-    @Expose
-    private String perPage;
-    @SerializedName("perpage")
-    @Expose
-    private String perpage;
-    @SerializedName("pages")
-    @Expose
-    private String pages;
     @SerializedName("title")
     @Expose
     private String title;
@@ -78,38 +66,6 @@ public class Photoset_ {
 
     public void setPhoto(List<Photo> photo) {
         this.photo = photo;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
-    }
-
-    public String getPerPage() {
-        return perPage;
-    }
-
-    public void setPerPage(String perPage) {
-        this.perPage = perPage;
-    }
-
-    public String getPerpage() {
-        return perpage;
-    }
-
-    public void setPerpage(String perpage) {
-        this.perpage = perpage;
-    }
-
-    public String getPages() {
-        return pages;
-    }
-
-    public void setPages(String pages) {
-        this.pages = pages;
     }
 
     public String getTitle() {

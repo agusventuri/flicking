@@ -21,9 +21,6 @@ public class Size {
     @SerializedName("url")
     @Expose
     private String url;
-    @SerializedName("media")
-    @Expose
-    private String media;
 
     public String getLabel() {
         return label;
@@ -63,14 +60,6 @@ public class Size {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getMedia() {
-        return media;
-    }
-
-    public void setMedia(String media) {
-        this.media = media;
     }
 
 }
