@@ -68,7 +68,7 @@ public class AlbumView extends Fragment {
         mAdapter = new AlbumsAdapter(getContext(), photos, activity);
 
         DataProvider dataProvider = new DataProvider();
-        dataProvider.loadPhotoset(mAdapter, toolbar);
+        dataProvider.loadPhotoset(mAdapter, toolbar, getActivity());
     }
 
     @SuppressLint("RestrictedApi")

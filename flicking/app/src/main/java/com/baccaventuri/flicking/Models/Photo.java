@@ -12,6 +12,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.util.Log;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import androidx.room.ColumnInfo;
@@ -19,6 +24,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
+
+import static android.content.ContentValues.TAG;
 
 @Entity(tableName = "Photos")
 public class Photo {
@@ -35,8 +42,12 @@ public class Photo {
     @Expose
     private String isprimary;
 
+    @Ignore
     private List<Size> size;
+    @Ignore
     private Bitmap bitmap;
+
+    private String bitmapUri;
 
     @Ignore
     private AlbumsAdapter mAdapter;
@@ -65,6 +76,14 @@ public class Photo {
         this.isprimary = isprimary;
     }
 
+    public String getBitmapUri() {
+        return bitmapUri;
+    }
+
+    public void setBitmapUri(String bitmapUri) {
+        this.bitmapUri = bitmapUri;
+    }
+
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
@@ -79,6 +98,7 @@ public class Photo {
         Flicking.getSharedQueue().add(request);
     }
 
+    @Ignore
     private final Response.Listener<String> onGetSizesLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
@@ -108,6 +128,7 @@ public class Photo {
         }
     };
 
+    @Ignore
     private final Response.ErrorListener onGetSizesError = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
