@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,21 +18,23 @@ import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
 import com.baccaventuri.flicking.GalleriesAdapter;
-import com.baccaventuri.flicking.Models.GaleriaUsuario;
-import com.baccaventuri.flicking.Models.Gallery;
+import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Photo;
-import com.baccaventuri.flicking.Models.Photoset;
-import com.baccaventuri.flicking.Models.Photoset_;
-import com.baccaventuri.flicking.Models.Photosets;
+import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Size;
 import com.baccaventuri.flicking.Models.Sizes;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DataProvider {
 
@@ -41,29 +44,32 @@ public class DataProvider {
     private Toolbar albumToolbar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
+    private String opcion;
     private String galery =
             "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
 
     public void loadGalleriaUsuario(GalleriesAdapter mGalleriesAdapter, Toolbar albumToolbar, FragmentActivity activity) {
+        opcion = "galeria";
         this.mGalleriesAdapter = mGalleriesAdapter;
         this.albumToolbar = albumToolbar;
 
         mAlbumViewModel = new ViewModelProvider(activity).get(AlbumViewModel.class);
 
-        mAlbumViewModel.getAllAlbums().observe(activity, new Observer<List<Photoset_>>() {
+        mAlbumViewModel.getAllAlbums().observe(activity, new Observer<List<Album>>() {
             @Override
-            public void onChanged(@Nullable final List<Photoset_> albums) {
+            public void onChanged(@Nullable final List<Album> albums) {
                 // Update the cached copy of the words in the adapter.
                 mGalleriesAdapter.updateDataset(albums);
             }
         });
 
-        List<Photoset_> albums = mAlbumViewModel.getAllAlbums().getValue();
+        List<Album> albums = mAlbumViewModel.getAllAlbums().getValue();
 
         if (albums != null) {
-            for (Photoset_ album:albums) {
+            for (Album album:albums) {
                 if (album.getBitmap() == null) {
                     //photo.fetchBitmap(mAlbumsAdapter);
+
                     fetchBipmap(album.getPrimary());
                 }
             }
@@ -76,6 +82,7 @@ public class DataProvider {
     }
 
     public void loadPhotoset (AlbumsAdapter mAlbumsAdapter, Toolbar albumToolbar, FragmentActivity activity) {
+        opcion = "album";
         this.mAlbumsAdapter = mAlbumsAdapter;
         this.albumToolbar = albumToolbar;
 
@@ -134,8 +141,10 @@ public class DataProvider {
     private final Response.Listener<String> onGetPhotosLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            Photoset photoset = gson.fromJson(response, Photoset.class);
-            List<Photo> photos = photoset.getPhotoset().getPhoto();
+            JsonObject object = (JsonObject) new JsonParser().parse(response);
+            JsonElement object1 = object.get("photoset");
+            Album album = gson.fromJson(object1.toString(), Album.class);
+            List<Photo> photos = album.getPhoto();
             mAlbumsAdapter.updateDataset(photos);
 
             for (Photo photo:photos) {
@@ -146,7 +155,7 @@ public class DataProvider {
                 }
             }
 
-            albumToolbar.setTitle(photoset.getPhotoset().getTitle());
+            //albumToolbar.setTitle(album.getTitle());
         }
     };
 
@@ -160,26 +169,26 @@ public class DataProvider {
     private final Response.Listener<String> onGetAlbumsLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            GaleriaUsuario galeria = gson.fromJson(response, GaleriaUsuario.class);
-            Photosets photosets = galeria.getPhotosets();
-            List<Photoset> albums = photosets.getPhotoset();
-            List<Photoset_> albumsset = new ArrayList<Photoset_>();
+            JsonObject object = (JsonObject) new JsonParser().parse(response);
+            JsonElement object1 = object.get("photosets");
 
-            //obtengo una lista de los Photoset_ de cada Photoset
-            for (Photoset album:albums) {
-                albumsset.add(album.getPhotoset());
-            }
-            mGalleriesAdapter.updateDataset(albumsset);
+            /*JsonArray array = object1.getAsJsonArray();
+            for (JsonElement jsonElement : array) {
+                JsonObject jo = jsonElement.getAsJsonObject();
+            }*/
+            Gallery gallery = gson.fromJson(object1, Gallery.class);
 
-            for (Photoset album:albums) {
+            List<Album> albums = gallery.getPhotoset();
+
+            for (Album album:albums) {
                 mAlbumViewModel.insert(album);
 
-                if (album.getPhotoset().getBitmap() == null) {
-                    fetchBipmap(album.getPhotoset().getId());
+                if (album.getBitmap() == null) {
+                    fetchBipmap(album.getPrimary());
                 }
             }
 
-            albumToolbar.setTitle("Albumes de usuario");
+            albumToolbar.setTitle("Albummes de usuario");
         }
     };
 
@@ -228,7 +237,12 @@ public class DataProvider {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         Bitmap bitmap = response.getBitmap();
-                        mGalleriesAdapter.notifyDataSetChanged();
+                        //if (opcion == "galeria"){
+                            mGalleriesAdapter.notifyDataSetChanged();
+                        //}else{
+                       //     mAlbumsAdapter.notifyDataSetChanged();
+                        //}
+
                     }
                 }
             });
@@ -243,8 +257,8 @@ public class DataProvider {
         }
     };
 
-    public void showPrimaryImage(Gallery gallery, ImageView view){
-        String photoId = gallery.getPrimaryPhotoId();
+    /*public void showPrimaryImage(Gallery gallery, ImageView view){
+        String photoId = gallery.getPages();
 
         StringBuilder url = new StringBuilder();
         url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=");
@@ -266,5 +280,5 @@ public class DataProvider {
 
             }
         });
-    }
+    }*/
 }

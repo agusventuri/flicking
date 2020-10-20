@@ -6,8 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.baccaventuri.flicking.Data.AlbumRepository;
-import com.baccaventuri.flicking.Models.Photoset_;
-import com.baccaventuri.flicking.Models.Photoset;
+import com.baccaventuri.flicking.Models.Album;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class AlbumViewModel extends AndroidViewModel {
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
-    private LiveData<List<Photoset_>> mAllPhotoSet;
+    private LiveData<List<Album>> mAllPhotoSet;
 
     public AlbumViewModel(Application application) {
         super(application);
@@ -26,11 +25,11 @@ public class AlbumViewModel extends AndroidViewModel {
         mAllPhotoSet = mRepository.getAllPhotoSet();
     }
 
-    public LiveData<List<Photoset_>> getAllAlbums() {
+    public LiveData<List<Album>> getAllAlbums() {
         return mAllPhotoSet;
     }
 
-    public void insert(Photoset album) {
+    public void insert(Album album) {
         mRepository.insert(album);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AlbumPhotos {
     @Embedded
-    public Photoset_ album;
+    public Album album;
     @Relation(
             parentColumn = "id",
             entityColumn = "id"

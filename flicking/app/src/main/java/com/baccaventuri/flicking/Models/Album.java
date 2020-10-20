@@ -13,7 +13,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "Albums")
-public class Photoset_ {
+public class Album {
 
     @PrimaryKey
     @NonNull
@@ -35,9 +35,10 @@ public class Photoset_ {
     @Ignore
     private List<Photo> photo = null;
 
-    @SerializedName("title")
-    @Expose
-    private String title;
+/*    @SerializedName("title")
+    @Expose*/
+    @Ignore
+    private Title title;
     @SerializedName("total")
     @Expose
     private String total;
@@ -84,13 +85,9 @@ public class Photoset_ {
         this.photo = photo;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title.getContent(); }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setTitle(Title title) { this.title = title; }
 
     public String getTotal() {
         return total;

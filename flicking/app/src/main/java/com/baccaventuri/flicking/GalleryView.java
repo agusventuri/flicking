@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Gallery;
-import com.baccaventuri.flicking.Models.Photoset_;
+import com.baccaventuri.flicking.Models.Album;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class GalleryView extends Fragment {
     private GalleriesAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private List<Photoset_> albums;
+    private List<Album> albums;
     private Gallery gallery;
     MainActivity activity;
 

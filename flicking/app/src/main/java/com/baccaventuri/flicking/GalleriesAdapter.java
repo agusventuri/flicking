@@ -9,19 +9,18 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baccaventuri.flicking.Data.DataProvider;
+import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Gallery;
-import com.baccaventuri.flicking.Models.Photoset_;
 
 import java.util.List;
 
 public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyViewHolder> {
-    private List<Photoset_> mData;
+    private List<Album> mData;
     private LayoutInflater mInflater;
     private AlbumClickListener mClickListener;
 
     // data is passed into the constructor
-    GalleriesAdapter(Context context,Gallery gallery, List<Photoset_> data, AlbumClickListener itemClickListener) {
+    GalleriesAdapter(Context context, Gallery gallery, List<Album> data, AlbumClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         setClickListener(itemClickListener);
@@ -36,7 +35,7 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
         public MyViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.gallery_item_name);
-            myImageView = itemView.findViewById(R.id.gallery_item_name);
+            myImageView = itemView.findViewById(R.id.gallery_item_image);
             itemView.setOnClickListener(this);
         }
 
@@ -57,8 +56,9 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Photoset_ album = mData.get(position);
-        holder.myTextView.setText(album.getTitle());
+        Album album = mData.get(position);
+        //holder.myTextView.setText(album.getTitle());
+        holder.myTextView.setText(String.valueOf(position));
         holder.myImageView.setImageBitmap(album.getBitmap());
     }
 
@@ -76,17 +76,17 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
         this.mClickListener = itemClickListener;
     }
 
-    public void updateDataset (List<Photoset_> mData) {
+    public void updateDataset (List<Album> mData) {
         this.mData = mData;
     }
 
-    public Photoset_ getItem (int pos) {
+    public Album getItem (int pos) {
         return mData.get(pos);
     }
 
     // parent activity will implement this method to respond to click events
     public interface AlbumClickListener {
         //void onItemClick(View view, int position);
-        void onAlbumClick(Photoset_ album);
+        void onAlbumClick(Album album);
     }
 }

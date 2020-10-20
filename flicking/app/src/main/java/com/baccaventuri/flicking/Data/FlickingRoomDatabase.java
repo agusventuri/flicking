@@ -6,12 +6,12 @@ import android.content.Context;
 
 import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
-import com.baccaventuri.flicking.Models.Photoset_;
+import com.baccaventuri.flicking.Models.Album;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Photo.class, Gallery.class, Photoset_.class}, version = 2, exportSchema = false)
+@Database(entities = {Photo.class, Album.class}, version = 4, exportSchema = false)
 abstract class FlickingRoomDatabase extends RoomDatabase {
 
     abstract PhotoDao photoDao();

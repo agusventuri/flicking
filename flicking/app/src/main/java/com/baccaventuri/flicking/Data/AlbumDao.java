@@ -5,11 +5,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
-import com.baccaventuri.flicking.Models.AlbumPhotos;
-import com.baccaventuri.flicking.Models.Photoset;
-import com.baccaventuri.flicking.Models.Photoset_;
+import com.baccaventuri.flicking.Models.Album;
 
 import java.util.List;
 
@@ -18,11 +15,11 @@ public interface AlbumDao {
 
     //@Transaction
     @Query("SELECT * from Albums")
-    LiveData<List<Photoset_>> getAlbums();
+    LiveData<List<Album>> getAlbums();
     //public List<AlbumPhotos> getAlbums();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Photoset_ album);
+    void insert(Album album);
 
     @Query("DELETE FROM Albums")
     void deleteAll();

@@ -10,15 +10,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.baccaventuri.flicking.Data.VolleyCatcher;
-import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
-import com.baccaventuri.flicking.Models.Photoset_;
+import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
 
@@ -74,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         transaction.commit();
     }
 
-    public void pasarAalbumFrag (Photoset_ album) {
+    public void pasarAalbumFrag (Album album) {
         Context context = getApplicationContext();
 
         // Create fragment and give it an argument for the selected article
@@ -173,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     }
 
     @Override
-    public void onAlbumClick(Photoset_ album)  {
+    public void onAlbumClick(Album album)  {
         pasarAalbumFrag(album);
     }
 }
