@@ -46,7 +46,8 @@ public class Photo {
     private List<Size> size;
     @Ignore
     private Bitmap bitmap;
-
+    @SerializedName("bitmapUri")
+    @Expose
     private String bitmapUri;
 
     @Ignore
@@ -84,7 +85,7 @@ public class Photo {
         this.bitmapUri = bitmapUri;
     }
 
-    public void fetchBitmap(AlbumsAdapter mAdapter) {
+    /*public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
         StringBuilder url = new StringBuilder();
@@ -93,6 +94,8 @@ public class Photo {
         url.append("&photo_id=");
         url.append(id);
         url.append("&format=json&nojsoncallback=1");
+        String a;
+        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
 
         StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetSizesLoaded, onGetSizesError);
         Flicking.getSharedQueue().add(request);
@@ -134,7 +137,7 @@ public class Photo {
         public void onErrorResponse(VolleyError error) {
             assert true;
         }
-    };
+    };*/
 
     public Bitmap getBitmap(){
         return bitmap;

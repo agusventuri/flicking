@@ -1,20 +1,21 @@
 package com.baccaventuri.flicking.Data;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import android.content.Context;
-import androidx.annotation.NonNull;
 
+import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
+import com.baccaventuri.flicking.Models.Photoset_;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Photo.class}, version = 1, exportSchema = false)
+@Database(entities = {Photo.class, Gallery.class, Photoset_.class}, version = 2, exportSchema = false)
 abstract class FlickingRoomDatabase extends RoomDatabase {
 
     abstract PhotoDao photoDao();
+    abstract AlbumDao albumDao();
 
     // marking the instance as volatile to ensure atomic access to the variable
     private static volatile FlickingRoomDatabase INSTANCE;
@@ -28,7 +29,7 @@ abstract class FlickingRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FlickingRoomDatabase.class, "flickr_database")
-                            .build();
+                            .fallbackToDestructiveMigration () .build ();
                 }
             }
         }

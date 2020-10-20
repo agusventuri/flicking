@@ -3,26 +3,26 @@ package com.baccaventuri.flicking;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.baccaventuri.flicking.Data.VolleyCatcher;
+import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
+import com.baccaventuri.flicking.Models.Photoset_;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements AlbumsAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleriesAdapter.AlbumClickListener {
     SharedPreferences sharedpreferences;
     public static final String sortPref = "sortPref";
     public static final String SortPicsByNameKey = "SortPicsByName";
@@ -56,14 +56,13 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Ite
                     .replace(R.id.container, SetsView.newInstance())
                     .commitNow();
         }
+        pasarAGalleryFrag();
     }
 
 
-//    public void pasarAPhotoFrag (String name, Drawable image) {
     public void pasarAPhotoFrag (Photo photo) {
 
-        // Create fragment and give it an argument for the selected article
-//        PhotoView newFragment = new PhotoView(name,image);
+        // Create fragment and give it an argument for the selected photo
         PhotoView newFragment = new PhotoView(photo);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -75,11 +74,25 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Ite
         transaction.commit();
     }
 
-    public void pasarAalbumFrag (View view) {
+    public void pasarAalbumFrag (Photoset_ album) {
         Context context = getApplicationContext();
 
         // Create fragment and give it an argument for the selected article
         AlbumView newFragment = new AlbumView(this);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    public void pasarAGalleryFrag () {
+
+        // Create fragment and give it an argument for the selected article
+        GalleryView newFragment = new GalleryView();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -155,7 +168,12 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Ite
     }
 
     @Override
-    public void onItemClick(Photo photo) {
+    public void onPhotoClick(Photo photo) {
         pasarAPhotoFrag(photo);
+    }
+
+    @Override
+    public void onAlbumClick(Photoset_ album)  {
+        pasarAalbumFrag(album);
     }
 }

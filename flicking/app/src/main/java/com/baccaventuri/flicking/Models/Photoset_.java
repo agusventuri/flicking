@@ -1,11 +1,22 @@
 package com.baccaventuri.flicking.Models;
 
+import android.graphics.Bitmap;
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "Albums")
 public class Photoset_ {
 
+    @PrimaryKey
+    @NonNull
     @SerializedName("id")
     @Expose
     private String id;
@@ -18,15 +29,20 @@ public class Photoset_ {
     @SerializedName("ownername")
     @Expose
     private String ownername;
-    @SerializedName("photo")
-    @Expose
+
+    //@SerializedName("photo")
+    //@Expose
+    @Ignore
     private List<Photo> photo = null;
+
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("total")
     @Expose
     private String total;
+    @Ignore
+    private Bitmap bitmap;
 
     public String getId() {
         return id;
@@ -83,5 +99,9 @@ public class Photoset_ {
     public void setTotal(String total) {
         this.total = total;
     }
+
+    public void setBitmap(Bitmap bitmap) { this.bitmap = bitmap; }
+
+    public Bitmap getBitmap(){ return bitmap; }
 
 }

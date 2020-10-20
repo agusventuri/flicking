@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.baccaventuri.flicking.Models.Photo;
 
@@ -42,9 +41,9 @@ public class PhotoView extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             name = getArguments().getString(ARG_PARAM1);
-           // image = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onResume() {
@@ -54,11 +53,8 @@ public class PhotoView extends Fragment {
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_photo);
         toolbar.setTitle(photo.getTitle());
-        //lleno datos foto
-        //TextView description = (TextView) getActivity().findViewById(R.id.description);
-        //description.setText();
+        //lleno datos photo
         ImageView imageView = (ImageView) getActivity().findViewById(R.id.photo);
-//        imageView.setImageDrawable(photo.getBitmap());
         imageView.setImageBitmap(photo.getBitmap());
     }
 

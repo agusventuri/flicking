@@ -9,17 +9,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baccaventuri.flicking.Models.Photo;
+import com.baccaventuri.flicking.Data.DataProvider;
+import com.baccaventuri.flicking.Models.Gallery;
+import com.baccaventuri.flicking.Models.Photoset_;
 
 import java.util.List;
 
-public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHolder> {
-    private List<Photo> mData;
+public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyViewHolder> {
+    private List<Photoset_> mData;
     private LayoutInflater mInflater;
-    private PhotoClickListener mClickListener;
+    private AlbumClickListener mClickListener;
 
     // data is passed into the constructor
-    AlbumsAdapter(Context context, List<Photo> data, PhotoClickListener itemClickListener) {
+    GalleriesAdapter(Context context,Gallery gallery, List<Photoset_> data, AlbumClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         setClickListener(itemClickListener);
@@ -33,31 +35,31 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.album_item_name);
-            myImageView = itemView.findViewById(R.id.album_item_image);
+            myTextView = itemView.findViewById(R.id.gallery_item_name);
+            myImageView = itemView.findViewById(R.id.gallery_item_name);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             //if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-            mClickListener.onPhotoClick(mData.get(getAdapterPosition()));
+            mClickListener.onAlbumClick(mData.get(getAdapterPosition()));
         }
     }
 
     // inflates the row layout from xml when needed
     @Override
-    public AlbumsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.album_item, parent, false);
+    public GalleriesAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.gallery_item, parent, false);
         return new MyViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Photo photo = mData.get(position);
-        holder.myTextView.setText(photo.getTitle());
-        holder.myImageView.setImageBitmap(photo.getBitmap());
+        Photoset_ album = mData.get(position);
+        holder.myTextView.setText(album.getTitle());
+        holder.myImageView.setImageBitmap(album.getBitmap());
     }
 
     // total number of rows
@@ -70,21 +72,21 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     }
 
     // allows clicks events to be caught
-    void setClickListener(PhotoClickListener itemClickListener) {
+    void setClickListener(AlbumClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    public void updateDataset (List<Photo> mData) {
+    public void updateDataset (List<Photoset_> mData) {
         this.mData = mData;
     }
 
-    public Photo getItem (int pos) {
+    public Photoset_ getItem (int pos) {
         return mData.get(pos);
     }
 
     // parent activity will implement this method to respond to click events
-    public interface PhotoClickListener {
+    public interface AlbumClickListener {
         //void onItemClick(View view, int position);
-        void onPhotoClick(Photo photo);
+        void onAlbumClick(Photoset_ album);
     }
 }
