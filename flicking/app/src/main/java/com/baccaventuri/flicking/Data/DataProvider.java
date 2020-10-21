@@ -237,11 +237,11 @@ public class DataProvider {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         Bitmap bitmap = response.getBitmap();
-                        if (opcion == "galeria"){
-                            mGalleriesAdapter.notifyDataSetChanged();
-                        }else{
+                        //if (opcion == "galeria"){
+                        //    mGalleriesAdapter.notifyDataSetChanged();
+                        //}else{
                             mAlbumsAdapter.notifyDataSetChanged();
-                        }
+                        //}
 
                     }
                 }

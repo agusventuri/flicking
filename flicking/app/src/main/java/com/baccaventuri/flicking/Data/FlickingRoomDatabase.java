@@ -11,7 +11,7 @@ import com.baccaventuri.flicking.Models.Album;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Photo.class, Album.class}, version = 6, exportSchema = false)
+@Database(entities = {Photo.class, Album.class}, version = 7, exportSchema = false)
 abstract class FlickingRoomDatabase extends RoomDatabase {
 
     abstract PhotoDao photoDao();
