@@ -143,16 +143,16 @@ public class DataProvider {
         public void onResponse(String response) {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
             JsonElement object1 = object.get("photoset");
-            Album album = gson.fromJson(object1.toString(), Album.class);
+            Album album = gson.fromJson(object1, Album.class);
             List<Photo> photos = album.getPhoto();
             mAlbumsAdapter.updateDataset(photos);
 
             for (Photo photo:photos) {
-                mPhotoViewModel.insert(photo);
+                //mPhotoViewModel.insert(photo);
 
-                if (photo.getBitmap() == null) {
+                //if (photo.getBitmap() == null) {
                     fetchBipmap(photo.getId());
-                }
+                //}
             }
 
             //albumToolbar.setTitle(album.getTitle());
@@ -237,11 +237,11 @@ public class DataProvider {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         Bitmap bitmap = response.getBitmap();
-                        //if (opcion == "galeria"){
+                        if (opcion == "galeria"){
                             mGalleriesAdapter.notifyDataSetChanged();
-                        //}else{
-                       //     mAlbumsAdapter.notifyDataSetChanged();
-                        //}
+                        }else{
+                            mAlbumsAdapter.notifyDataSetChanged();
+                        }
 
                     }
                 }

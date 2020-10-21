@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
                     .commitNow();
         }
         pasarAGalleryFrag();
+        //pasarAalbumFrag();
     }
 
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         transaction.commit();
     }
 
-    public void pasarAalbumFrag (Album album) {
+    public void pasarAalbumFrag () {
         Context context = getApplicationContext();
 
         // Create fragment and give it an argument for the selected article
@@ -169,6 +170,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
     @Override
     public void onAlbumClick(Album album)  {
-        pasarAalbumFrag(album);
+        //pasarAalbumFrag(album);
     }
 }

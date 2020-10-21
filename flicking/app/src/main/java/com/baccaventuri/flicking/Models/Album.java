@@ -35,8 +35,9 @@ public class Album {
     @Ignore
     private List<Photo> photo = null;
 
-/*    @SerializedName("title")
-    @Expose*/
+//    @SerializedName("title")
+//    @Expose
+//    private String title;
     @Ignore
     private Title title;
     @SerializedName("total")
@@ -88,6 +89,8 @@ public class Album {
     public String getTitle() { return title.getContent(); }
 
     public void setTitle(Title title) { this.title = title; }
+//    public String getTitle() { return title; }
+//    public void setTitle(String title) { this.title = title; }
 
     public String getTotal() {
         return total;
