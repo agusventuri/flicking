@@ -148,14 +148,14 @@ public class DataProvider {
             mAlbumsAdapter.updateDataset(photos);
 
             for (Photo photo:photos) {
-                //mPhotoViewModel.insert(photo);
+                mPhotoViewModel.insert(photo);
 
-                //if (photo.getBitmap() == null) {
+                if (photo.getBitmap() == null) {
                     fetchBipmap(photo.getId());
-                //}
+                }
             }
 
-            //albumToolbar.setTitle(album.getTitle());
+            albumToolbar.setTitle(album.getTitle());
         }
     };
 
