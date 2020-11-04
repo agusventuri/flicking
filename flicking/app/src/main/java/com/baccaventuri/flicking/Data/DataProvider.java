@@ -159,7 +159,6 @@ public class DataProvider {
                     photo.fetchBitmap(mAlbumsAdapter);
                 }
             }
-
             albumToolbar.setTitle(album.getTitle());
         }
     };

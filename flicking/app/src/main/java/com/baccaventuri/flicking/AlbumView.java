@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baccaventuri.flicking.Data.DataProvider;
+import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Photo;
 
 import java.util.List;
@@ -37,11 +38,12 @@ public class AlbumView extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
 
     private List<Photo> photos;
+    private Album album;
     MainActivity activity;
 
-    public AlbumView(MainActivity activity) {
+    public AlbumView(Album album) {
         // Required empty public constructor
-        this.activity = activity;
+        this.album = album;
     }
 
     // TODO: Rename and change types and number of parameters
@@ -65,7 +67,7 @@ public class AlbumView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_album);
 
 
-        mAdapter = new AlbumsAdapter(getContext(), photos, activity);
+        mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
 
         DataProvider dataProvider = new DataProvider();
         dataProvider.loadPhotoset(mAdapter, toolbar, getActivity());

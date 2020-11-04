@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Gallery;
+import com.baccaventuri.flicking.Models.Photo;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
     private AlbumClickListener mClickListener;
 
     // data is passed into the constructor
-    GalleriesAdapter(Context context, Gallery gallery, List<Album> data, AlbumClickListener itemClickListener) {
+    GalleriesAdapter(Context context, List<Album> data, AlbumClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         setClickListener(itemClickListener);
@@ -60,7 +61,7 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
         Album album = mData.get(position);
         //holder.myTextView.setText(album.getTitle());
         holder.myTextView.setText(String.valueOf(position));
-        Log.d("adapter",album.toString());
+        Log.d("josuecapo",album.getId());
         holder.myImageView.setImageBitmap(album.getBitmap());
     }
 

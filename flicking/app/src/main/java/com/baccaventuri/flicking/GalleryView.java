@@ -40,9 +40,9 @@ public class GalleryView extends Fragment {
     private Gallery gallery;
     MainActivity activity;
 
-    public GalleryView() {
+    public GalleryView(MainActivity activity) {
         // Required empty public constructor
-        //this.activity = activity;
+        this.activity = activity;
     }
 
     // TODO: Rename and change types and number of parameters
@@ -66,7 +66,7 @@ public class GalleryView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_main);
 
 
-        mAdapter = new GalleriesAdapter(getContext(), gallery, albums, activity);
+        mAdapter = new GalleriesAdapter(getContext(), albums, activity);
 
         DataProvider dataProvider = new DataProvider();
         dataProvider.loadGalleriaUsuario(mAdapter, toolbar, getActivity());
