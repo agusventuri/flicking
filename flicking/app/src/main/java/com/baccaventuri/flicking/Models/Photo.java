@@ -85,7 +85,7 @@ public class Photo {
         this.bitmapUri = bitmapUri;
     }
 
-    /*public void fetchBitmap(AlbumsAdapter mAdapter) {
+    public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
         StringBuilder url = new StringBuilder();
@@ -137,7 +137,7 @@ public class Photo {
         public void onErrorResponse(VolleyError error) {
             assert true;
         }
-    };*/
+    };
 
     public Bitmap getBitmap(){
         return bitmap;

@@ -151,7 +151,8 @@ public class DataProvider {
                 mPhotoViewModel.insert(photo);
 
                 if (photo.getBitmap() == null) {
-                    fetchBipmap(photo.getId());
+                    //fetchBipmap(photo.getId());
+                    photo.fetchBitmap(mAlbumsAdapter);
                 }
             }
 
