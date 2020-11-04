@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
         Album album = mData.get(position);
         //holder.myTextView.setText(album.getTitle());
         holder.myTextView.setText(String.valueOf(position));
+        Log.d("adapter",album.toString());
         holder.myImageView.setImageBitmap(album.getBitmap());
     }
 

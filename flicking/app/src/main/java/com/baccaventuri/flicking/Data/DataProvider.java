@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking.Data;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -66,16 +67,19 @@ public class DataProvider {
         List<Album> albums = mAlbumViewModel.getAllAlbums().getValue();
 
         if (albums != null) {
+            Log.d("uno","antes for");
             for (Album album:albums) {
                 if (album.getBitmap() == null) {
                     //photo.fetchBitmap(mAlbumsAdapter);
 
-                    fetchBipmap(album.getPrimary());
+                    //fetchBipmap(album.getPrimary());
+                    album.fetchBitmap(mGalleriesAdapter);
                 }
             }
             mGalleriesAdapter.updateDataset(albums);
             mGalleriesAdapter.notifyDataSetChanged();
         } else {
+            Log.d("dos","desp for");
             fetchGalleriaUsuario();
         }
 
@@ -180,12 +184,14 @@ public class DataProvider {
             Gallery gallery = gson.fromJson(object1, Gallery.class);
 
             List<Album> albums = gallery.getPhotoset();
+            mGalleriesAdapter.updateDataset(albums);
 
             for (Album album:albums) {
                 mAlbumViewModel.insert(album);
 
                 if (album.getBitmap() == null) {
-                    fetchBipmap(album.getPrimary());
+                    //fetchBipmap(album.getPrimary());
+                    album.fetchBitmap(mGalleriesAdapter);
                 }
             }
 

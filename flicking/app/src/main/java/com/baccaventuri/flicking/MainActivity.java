@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
                     .replace(R.id.container, SetsView.newInstance())
                     .commitNow();
         }
-        //pasarAGalleryFrag();
-        pasarAalbumFrag();
+        pasarAGalleryFrag();
+        //pasarAalbumFrag();
     }
 
 
