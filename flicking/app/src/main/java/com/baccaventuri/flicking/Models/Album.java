@@ -138,8 +138,6 @@ public class Album {
         String a;
         a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
 
-
-
         StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetSizesLoaded, onGetSizesError);
         Flicking.getSharedQueue().add(request);
     }

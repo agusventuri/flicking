@@ -2,14 +2,13 @@ package com.baccaventuri.flicking.Data;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
+import org.json.*;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,22 +19,20 @@ import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
 import com.baccaventuri.flicking.GalleriesAdapter;
 import com.baccaventuri.flicking.Models.Album;
-import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Gallery;
+import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Size;
 import com.baccaventuri.flicking.Models.Sizes;
+import com.baccaventuri.flicking.Models.Title;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DataProvider {
 
@@ -146,8 +143,25 @@ public class DataProvider {
         @Override
         public void onResponse(String response) {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
+//            JSONParser parser = new JsonParser();
+//            JSONObject json = (JSONObject) parser.parse(response);
+//            JSONObject objnew = (JSONObject) new SONParser().parse(response);
+//            JSONObject obj=
+
             JsonElement object1 = object.get("photoset");
-            Album album = gson.fromJson(object1, Album.class);
+
+            JsonObject objphotoset = object.getAsJsonObject("photoset");
+            JsonElement objtit = objphotoset.get("title");
+
+            //Title titulo = gson.fromJson(objtit, Title.class);
+            Title titulo = new Title();
+            titulo.setContent(objtit.toString());
+
+            String tit = gson.toJson(titulo);
+
+            objphotoset.addProperty("title",tit);
+
+            Album album = gson.fromJson(objphotoset, Album.class);
             List<Photo> photos = album.getPhoto();
             mAlbumsAdapter.updateDataset(photos);
 
