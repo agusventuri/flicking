@@ -82,7 +82,7 @@ public class DataProvider {
 
     }
 
-    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter, Toolbar albumToolbar, FragmentActivity activity) {
+    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter,Album album, Toolbar albumToolbar, FragmentActivity activity) {
         opcion = "album";
         this.mAlbumsAdapter = mAlbumsAdapter;
         this.albumToolbar = albumToolbar;
@@ -99,7 +99,7 @@ public class DataProvider {
 
         List<Photo> photos = mPhotoViewModel.getAllPhotos().getValue();
 
-        if (photos != null) {
+        /*if (photos != null) {
             for (Photo photo:photos) {
                 if (photo.getBitmap() == null) {
                     //photo.fetchBitmap(mAlbumsAdapter);
@@ -108,18 +108,21 @@ public class DataProvider {
             }
             mAlbumsAdapter.updateDataset(photos);
             mAlbumsAdapter.notifyDataSetChanged();
-        } else {
-            fetchPhotoset();
-        }
+        } else {*/
+            fetchPhotoset(album);
+        //}
 
     }
 
-    private void fetchPhotoset() {
+    private void fetchPhotoset(Album album) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
 
-        String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=72157628042948461&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
+        String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=" +
+                //"72157628042948461" +
+                album.getId()+
+                "&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
         StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotosLoaded, onGetPhotosError);
         Flicking.getSharedQueue().add(request);
     }
@@ -143,24 +146,19 @@ public class DataProvider {
         @Override
         public void onResponse(String response) {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
-//            JSONParser parser = new JsonParser();
-//            JSONObject json = (JSONObject) parser.parse(response);
-//            JSONObject objnew = (JSONObject) new SONParser().parse(response);
-//            JSONObject obj=
 
-            JsonElement object1 = object.get("photoset");
-
+            //convierto el json de album que recibo con campo title con un string,
+            //a un json con campo title como {content:"mytitle"}, que es como
+            //está hecho el modelo album
             JsonObject objphotoset = object.getAsJsonObject("photoset");
             JsonElement objtit = objphotoset.get("title");
-
-            //Title titulo = gson.fromJson(objtit, Title.class);
             Title titulo = new Title();
             titulo.setContent(objtit.toString());
-
             String tit = gson.toJson(titulo);
+            JsonElement titjson = new JsonParser().parse(tit);
+            objphotoset.add("title",titjson);
 
-            objphotoset.addProperty("title",tit);
-
+            //obtengo album object oon formato correcto
             Album album = gson.fromJson(objphotoset, Album.class);
             List<Photo> photos = album.getPhoto();
             mAlbumsAdapter.updateDataset(photos);
@@ -190,10 +188,6 @@ public class DataProvider {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
             JsonElement object1 = object.get("photosets");
 
-            /*JsonArray array = object1.getAsJsonArray();
-            for (JsonElement jsonElement : array) {
-                JsonObject jo = jsonElement.getAsJsonObject();
-            }*/
             Gallery gallery = gson.fromJson(object1, Gallery.class);
 
             List<Album> albums = gallery.getPhotoset();

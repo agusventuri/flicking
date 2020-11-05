@@ -44,6 +44,7 @@ public class AlbumView extends Fragment {
     public AlbumView(Album album) {
         // Required empty public constructor
         this.album = album;
+        this.photos = album.getPhoto();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -70,7 +71,7 @@ public class AlbumView extends Fragment {
         mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
 
         DataProvider dataProvider = new DataProvider();
-        dataProvider.loadPhotoset(mAdapter, toolbar, getActivity());
+        dataProvider.loadPhotoset(mAdapter,album, toolbar, getActivity());
     }
 
     @SuppressLint("RestrictedApi")
@@ -80,7 +81,7 @@ public class AlbumView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
-        toolbar.setTitle("Album");
+        toolbar.setTitle(album.getTitle());
 
         albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

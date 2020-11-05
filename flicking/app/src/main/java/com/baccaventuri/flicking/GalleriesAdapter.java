@@ -59,9 +59,8 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Album album = mData.get(position);
-        //holder.myTextView.setText(album.getTitle());
-        holder.myTextView.setText(String.valueOf(position));
-        Log.d("josuecapo",album.getId());
+        holder.myTextView.setText(album.getTitle());
+        //holder.myTextView.setText(String.valueOf(position));
         holder.myImageView.setImageBitmap(album.getBitmap());
     }
 
