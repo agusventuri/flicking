@@ -76,10 +76,10 @@ public class GalleryView extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-/*        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
-        toolbar.setTitle("Albumes de josue");*/
+        toolbar.setTitle("Albumes de josue");
 
         albumRecyclerView = getActivity().findViewById(R.id.galeriaRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

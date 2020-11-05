@@ -201,8 +201,6 @@ public class DataProvider {
                     album.fetchBitmap(mGalleriesAdapter);
                 }
             }
-
-            albumToolbar.setTitle("Albummes de usuario");
         }
     };
 
