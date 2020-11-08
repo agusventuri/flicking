@@ -1,7 +1,6 @@
 package com.baccaventuri.flicking;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.baccaventuri.flicking.Models.Album;
-import com.baccaventuri.flicking.Models.Gallery;
-import com.baccaventuri.flicking.Models.Photo;
 
 import java.util.List;
 
-public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
     private List<Album> mData;
     private LayoutInflater mInflater;
     private AlbumClickListener mClickListener;
 
     // data is passed into the constructor
-    GalleriesAdapter(Context context, List<Album> data, AlbumClickListener itemClickListener) {
+    GalleryAdapter(Context context, List<Album> data, AlbumClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         setClickListener(itemClickListener);
@@ -50,7 +47,7 @@ public class GalleriesAdapter extends RecyclerView.Adapter<GalleriesAdapter.MyVi
 
     // inflates the row layout from xml when needed
     @Override
-    public GalleriesAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GalleryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.gallery_item, parent, false);
         return new MyViewHolder(view);
     }

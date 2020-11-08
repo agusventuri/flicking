@@ -1,14 +1,12 @@
 package com.baccaventuri.flicking.Data;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import org.json.*;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,39 +15,44 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
-import com.baccaventuri.flicking.GalleriesAdapter;
+import com.baccaventuri.flicking.GalleryAdapter;
 import com.baccaventuri.flicking.Models.Album;
+import com.baccaventuri.flicking.Models.Comment;
 import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Size;
 import com.baccaventuri.flicking.Models.Sizes;
 import com.baccaventuri.flicking.Models.Title;
+import com.baccaventuri.flicking.PhotoAdapter;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataProvider {
 
     private Gson gson;
-    private GalleriesAdapter mGalleriesAdapter;
+    private GalleryAdapter mGalleriesAdapter;
     private AlbumsAdapter mAlbumsAdapter;
-    private Toolbar albumToolbar;
+    private PhotoAdapter mPhotoAdapter;
+    private Toolbar toolBar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
     private String opcion;
     private String galery =
             "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
 
-    public void loadGalleriaUsuario(GalleriesAdapter mGalleriesAdapter, Toolbar albumToolbar, FragmentActivity activity) {
+    public void loadGalleriaUsuario(GalleryAdapter mGalleriesAdapter, Toolbar albumToolbar, FragmentActivity activity) {
         opcion = "galeria";
         this.mGalleriesAdapter = mGalleriesAdapter;
-        this.albumToolbar = albumToolbar;
+        this.toolBar = albumToolbar;
 
         mAlbumViewModel = new ViewModelProvider(activity).get(AlbumViewModel.class);
 
@@ -64,11 +67,8 @@ public class DataProvider {
         List<Album> albums = mAlbumViewModel.getAllAlbums().getValue();
 
         if (albums != null) {
-            Log.d("uno","antes for");
             for (Album album:albums) {
                 if (album.getBitmap() == null) {
-                    //photo.fetchBitmap(mAlbumsAdapter);
-
                     //fetchBipmap(album.getPrimary());
                     album.fetchBitmap(mGalleriesAdapter);
                 }
@@ -76,16 +76,14 @@ public class DataProvider {
             mGalleriesAdapter.updateDataset(albums);
             mGalleriesAdapter.notifyDataSetChanged();
         } else {
-            Log.d("dos","desp for");
             fetchGalleriaUsuario();
         }
 
     }
 
     public void loadPhotoset (AlbumsAdapter mAlbumsAdapter,Album album, Toolbar albumToolbar, FragmentActivity activity) {
-        opcion = "album";
         this.mAlbumsAdapter = mAlbumsAdapter;
-        this.albumToolbar = albumToolbar;
+        this.toolBar = albumToolbar;
 
         mPhotoViewModel = new ViewModelProvider(activity).get(PhotoViewModel.class);
 
@@ -114,6 +112,11 @@ public class DataProvider {
 
     }
 
+    public void loadPhoto(PhotoAdapter mPhotoAdapter,Photo photo, FragmentActivity activity) {
+        this.mPhotoAdapter = mPhotoAdapter;
+        fetchCommentsPhoto(photo);
+    }
+
     private void fetchPhotoset(Album album) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
@@ -132,12 +135,22 @@ public class DataProvider {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
 
-        /*String url =
-                "https://www.flickr.com/services/rest/?method=flickr.galleries.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&gallery_id=6065-72157617483228192&format=json&nojsoncallback=1";
-*/
         String url =
                 "https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&format=json&nojsoncallback=1";
         StringRequest request = new StringRequest(Request.Method.GET, url, onGetAlbumsLoaded, onGetAlbumsError);
+        Flicking.getSharedQueue().add(request);
+    }
+
+    private void fetchCommentsPhoto(Photo photo) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+        gson = gsonBuilder.create();
+
+        String url =
+                "https://www.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&" +
+                        "photo_id="+photo.getId()+
+                        "&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetCommentsLoaded, onGetCommentsError);
         Flicking.getSharedQueue().add(request);
     }
 
@@ -171,7 +184,7 @@ public class DataProvider {
                     photo.fetchBitmap(mAlbumsAdapter);
                 }
             }
-            albumToolbar.setTitle(album.getTitle());
+            toolBar.setTitle(album.getTitle());
         }
     };
 
@@ -205,6 +218,33 @@ public class DataProvider {
     };
 
     private final Response.ErrorListener onGetAlbumsError = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private final Response.Listener<String> onGetCommentsLoaded = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            List<Comment> comentarios = new ArrayList<>();
+
+            JsonObject object = (JsonObject) new JsonParser().parse(response);
+            JsonElement comments = object.get("comments");
+            JsonObject commentObject = comments.getAsJsonObject();
+            JsonArray comment = (JsonArray) commentObject.get("comment");
+
+            for (JsonElement comm: comment) {
+                Comment comentario = gson.fromJson(comm,Comment.class);
+                if (comentario !=null){
+                    comentarios.add(comentario);
+                }
+            }
+            mPhotoAdapter.updateDataset(comentarios);
+        }
+    };
+
+    private final Response.ErrorListener onGetCommentsError = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();

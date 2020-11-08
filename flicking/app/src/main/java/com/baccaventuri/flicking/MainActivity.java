@@ -17,7 +17,7 @@ import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleriesAdapter.AlbumClickListener {
+public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
     SharedPreferences sharedpreferences;
     public static final String sortPref = "sortPref";
     public static final String SortPicsByNameKey = "SortPicsByName";

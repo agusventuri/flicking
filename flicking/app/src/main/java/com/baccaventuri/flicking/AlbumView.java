@@ -67,7 +67,6 @@ public class AlbumView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_album);
 
-
         mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
 
         DataProvider dataProvider = new DataProvider();

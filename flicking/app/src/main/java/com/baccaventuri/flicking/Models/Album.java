@@ -16,9 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
-import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
-import com.baccaventuri.flicking.GalleriesAdapter;
+import com.baccaventuri.flicking.GalleryAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -66,7 +65,7 @@ public class Album {
 //    private String bitmapUri;
 
     @Ignore
-    private GalleriesAdapter mAdapter;
+    private GalleryAdapter mAdapter;
 
     public String getId() {
         return id;
@@ -132,7 +131,7 @@ public class Album {
 
     public Bitmap getBitmap(){ return bitmap; }
 
-    public void fetchBitmap(GalleriesAdapter mAdapter) {
+    public void fetchBitmap(GalleryAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
         StringBuilder url = new StringBuilder();

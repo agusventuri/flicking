@@ -139,7 +139,7 @@ public class Photo {
         }
     };
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return bitmap;
     }
 

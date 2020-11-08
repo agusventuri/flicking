@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="10dp"
+    android:background="@color/backgroundComment"
+    android:orientation="vertical"
+    >
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/comment_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:textColor="@color/colorPrimaryDark"
         android:gravity="center_vertical"
         android:text="Usuario"
+        android:textStyle="bold"
         android:visibility="visible" />
 
-    <TextView
-        android:id="@+id/comment"
+    <LinearLayout
+        android:id="@+id/comments"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_gravity="bottom"
-        android:gravity="center_vertical"
-        android:text="Usuario"
-        android:visibility="visible" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/comment_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blackLetter"
+            android:textStyle="bold"
+            android:text="Contenido comentario"
+            android:visibility="visible" />
 
+    </LinearLayout>
 </LinearLayout>

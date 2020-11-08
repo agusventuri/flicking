@@ -33,7 +33,7 @@ public class GalleryView extends Fragment {
     private String mParam2;
 
     private RecyclerView albumRecyclerView;
-    private GalleriesAdapter mAdapter;
+    private GalleryAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private List<Album> albums;
@@ -66,7 +66,7 @@ public class GalleryView extends Fragment {
         toolbar.inflateMenu(R.menu.menu_main);
 
 
-        mAdapter = new GalleriesAdapter(getContext(), albums, activity);
+        mAdapter = new GalleryAdapter(getContext(), albums, activity);
 
         DataProvider dataProvider = new DataProvider();
         dataProvider.loadGalleriaUsuario(mAdapter, toolbar, getActivity());
