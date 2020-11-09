@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking.ViewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -29,6 +30,14 @@ public class PhotoViewModel extends AndroidViewModel {
         return mAllPhotos;
     }
 
+    public Boolean isEmpty () {
+        try {
+            return mAllPhotos.getValue().isEmpty();
+        } catch (NullPointerException e) {
+            Log.d("exception photos", e.getMessage() + "");
+        }
+        return true;
+    }
 
     public void insert(Photo photo) {
         mRepository.insert(photo);

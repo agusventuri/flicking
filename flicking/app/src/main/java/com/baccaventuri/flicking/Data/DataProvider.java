@@ -3,6 +3,7 @@ package com.baccaventuri.flicking.Data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -63,6 +64,7 @@ public class DataProvider {
             public void onChanged(@Nullable final List<Album> albums) {
                 // Update the cached copy of the words in the adapter.
                 mGalleriesAdapter.updateDataset(albums);
+                mGalleriesAdapter.notifyDataSetChanged();
             }
         });
 
@@ -92,20 +94,22 @@ public class DataProvider {
         mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc).observe(activity, new Observer<List<Photo>>() {
             @Override
             public void onChanged(@Nullable final List<Photo> photos) {
-                mAlbumsAdapter.updateDataset(photos);
-                mAlbumsAdapter.notifyDataSetChanged();
-
                 for (Photo photo:photos) {
                     if (photo.getBitmap() == null) {
                         photo.fetchBitmap(mAlbumsAdapter);
                         //fetchBipmap(photo.getId());
                     }
                 }
+
+                if (mPhotoViewModel.isEmpty()) {
+                    fetchPhotoset(album);
+                }
                 mAlbumsAdapter.updateDataset(photos);
                 mAlbumsAdapter.notifyDataSetChanged();
             }
 
         });
+
 
         //List<> mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc)
 
