@@ -95,17 +95,16 @@ public class DataProvider {
                 mAlbumsAdapter.updateDataset(photos);
                 mAlbumsAdapter.notifyDataSetChanged();
 
-                if (photos != null) {
-                    for (Photo photo:photos) {
-                        if (photo.getBitmap() == null) {
-                            photo.fetchBitmap(mAlbumsAdapter);
-                            //fetchBipmap(photo.getId());
-                        }
+                for (Photo photo:photos) {
+                    if (photo.getBitmap() == null) {
+                        photo.fetchBitmap(mAlbumsAdapter);
+                        //fetchBipmap(photo.getId());
                     }
-                    mAlbumsAdapter.updateDataset(photos);
-                    mAlbumsAdapter.notifyDataSetChanged();
                 }
+                mAlbumsAdapter.updateDataset(photos);
+                mAlbumsAdapter.notifyDataSetChanged();
             }
+
         });
 
         //List<> mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc)

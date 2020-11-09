@@ -55,4 +55,13 @@ public class PhotoRepository {
             mPhotoDao.insert(photo);
         });
     }
+
+/*    void insert(Photo photo) {
+        new Thread() {
+            @Override
+            public void run() {
+                mPhotoDao.insert(photo);
+            }
+        }.start();
+    }*/
 }
