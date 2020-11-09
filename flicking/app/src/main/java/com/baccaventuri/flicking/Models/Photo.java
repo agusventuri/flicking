@@ -58,7 +58,7 @@ public class Photo {
 
     @SerializedName("taken")
     @Expose
-    private String taken;
+    private Date taken;
 
     @SerializedName("photoset")
     @Expose
@@ -111,9 +111,9 @@ public class Photo {
         this.bitmapUri = bitmapUri;
     }
 
-    public String getTaken() { return taken; }
+    public Date getTaken() { return taken; }
 
-    public void setTaken(String taken) { this.taken = taken; }
+    public void setTaken(Date taken) { this.taken = taken; }
 
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -198,7 +198,7 @@ public class Photo {
             JsonElement photo = object.get("photo");
             JsonObject photoobject = photo.getAsJsonObject();
             JsonElement dates = (JsonElement) photoobject.get("dates");
-            String created = dates.getAsJsonObject().get("taken").toString();
+            Date created = new Date(dates.getAsJsonObject().get("taken").toString());
             String pep = "a";
             setTaken(created);
         }
