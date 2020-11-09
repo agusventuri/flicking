@@ -104,14 +104,12 @@ public class DataProvider {
                 if (mPhotoViewModel.isEmpty()) {
                     fetchPhotoset(album);
                 }
+
                 mAlbumsAdapter.updateDataset(photos);
                 mAlbumsAdapter.notifyDataSetChanged();
             }
 
         });
-
-
-        //List<> mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc)
 
     }
 
@@ -177,7 +175,6 @@ public class DataProvider {
             //obtengo album object oon formato correcto
             Album album = gson.fromJson(objphotoset, Album.class);
             List<Photo> photos = album.getPhoto();
-            mAlbumsAdapter.updateDataset(photos);
 
             for (Photo photo:photos) {
                 //photo.fetchDates();
@@ -189,7 +186,6 @@ public class DataProvider {
                     photo.fetchBitmap(mAlbumsAdapter);
                 }
             }
-            toolBar.setTitle(album.getTitle());
         }
     };
 
