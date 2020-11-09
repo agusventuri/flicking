@@ -1,6 +1,8 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Photo;
+import android.content.SharedPreferences;
 
 import java.util.List;
 
@@ -40,6 +43,16 @@ public class AlbumView extends Fragment {
     private List<Photo> photos;
     private Album album;
     MainActivity activity;
+    DataProvider dataProvider = new DataProvider();
+
+    SharedPreferences sharedpreferences;
+    public static final String sortPref = "sortPref";
+    public static final String SortPicsByNameKey = "SortPicsByName";
+    public static final String SortPicsByNameAscKey = "SortPicsByNameAsc";
+    public static final String SortPicsByDateAscKey = "SortPicsByDateAsc";
+
+    private Boolean orderByName;
+    private Boolean asc;
 
     public AlbumView(Album album) {
         // Required empty public constructor
@@ -67,10 +80,12 @@ public class AlbumView extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_album);
 
+        //preferencias para ordenamiento
+        sharedpreferences = getActivity().getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+
         mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
 
-        DataProvider dataProvider = new DataProvider();
-        dataProvider.loadPhotoset(mAdapter,album, toolbar, getActivity());
     }
 
     @SuppressLint("RestrictedApi")
@@ -81,6 +96,29 @@ public class AlbumView extends Fragment {
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle(album.getTitle());
+
+        sharedpreferences = getActivity().getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+
+        //obtengo que tipo de orden es
+        //si es orden x nombre...
+        if(sharedpreferences.getBoolean(SortPicsByNameKey,true)){
+            orderByName=true;
+            if (sharedpreferences.getBoolean(SortPicsByNameAscKey,true)){
+                asc=true;
+            }else{
+                asc=false;
+            }
+            //si es orden x fecha...
+        }else{
+            orderByName=false;
+            if (sharedpreferences.getBoolean(SortPicsByDateAscKey,true)){
+                asc=true;
+            }else{
+                asc=false;
+            }
+        }
+        dataProvider.loadPhotoset(mAdapter,album,orderByName,asc, toolbar, getActivity());
 
         albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -94,4 +132,5 @@ public class AlbumView extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_album_view, container, false);
     }
+
 }

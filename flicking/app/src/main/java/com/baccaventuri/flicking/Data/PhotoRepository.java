@@ -15,12 +15,36 @@ public class PhotoRepository {
     public PhotoRepository(Application application) {
         FlickingRoomDatabase db = FlickingRoomDatabase.getDatabase(application);
         mPhotoDao = db.photoDao();
-        mAllPhotos = mPhotoDao.getAllPhotos();
     }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    public LiveData<List<Photo>> getAllPhotos() {
+    public LiveData<List<Photo>> getAllPhotos(String albumID, Boolean orderByName, Boolean asc) {
+        if (orderByName){
+            if (asc){
+                mAllPhotos = mPhotoDao.getPhotosNameASC(albumID);
+                return mAllPhotos;
+            }else{
+                mAllPhotos = mPhotoDao.getPhotosNameDESC(albumID);
+                return mAllPhotos;
+            }
+
+        }else{
+            if (asc){
+                mAllPhotos = mPhotoDao.getPhotosDateASC(albumID);
+                return mAllPhotos;
+            }else{
+                mAllPhotos = mPhotoDao.getPhotosDateDESC(albumID);
+                return mAllPhotos;
+            }
+        }
+    }
+
+    public LiveData<List<Photo>> getPhotosNameASC() {
+        return mAllPhotos;
+    }
+
+    public LiveData<List<Photo>> getPhotosNameDESC() {
         return mAllPhotos;
     }
 

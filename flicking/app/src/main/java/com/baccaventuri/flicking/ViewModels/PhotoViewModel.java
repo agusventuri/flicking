@@ -22,12 +22,13 @@ public class PhotoViewModel extends AndroidViewModel {
     public PhotoViewModel(Application application) {
         super(application);
         mRepository = new PhotoRepository(application);
-        mAllPhotos = mRepository.getAllPhotos();
     }
 
-    public LiveData<List<Photo>> getAllPhotos() {
+    public LiveData<List<Photo>> getAllPhotos(String album, Boolean orderByName, Boolean asc) {
+        mAllPhotos = mRepository.getAllPhotos(album,orderByName,asc);
         return mAllPhotos;
     }
+
 
     public void insert(Photo photo) {
         mRepository.insert(photo);

@@ -9,6 +9,10 @@ import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import android.graphics.Bitmap;
@@ -17,12 +21,14 @@ import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
 import androidx.annotation.NonNull;
 
 import static android.content.ContentValues.TAG;
@@ -50,6 +56,18 @@ public class Photo {
     @Expose
     private String bitmapUri;
 
+    @SerializedName("taken")
+    @Expose
+    private String taken;
+
+    @SerializedName("photoset")
+    @Expose
+    private String photoset;
+
+    @ForeignKey(entity = Album.class, parentColumns = "id", childColumns = "id_photoset")
+
+
+
     @Ignore
     private AlbumsAdapter mAdapter;
 
@@ -59,6 +77,14 @@ public class Photo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPhotoset() {
+        return photoset;
+    }
+
+    public void setPhotoset(String id) {
+        this.photoset = id;
     }
 
     public String getTitle() {
@@ -84,6 +110,10 @@ public class Photo {
     public void setBitmapUri(String bitmapUri) {
         this.bitmapUri = bitmapUri;
     }
+
+    public String getTaken() { return taken; }
+
+    public void setTaken(String taken) { this.taken = taken; }
 
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -142,5 +172,44 @@ public class Photo {
     public Bitmap getBitmap() {
         return bitmap;
     }
+
+    //carga de fechas
+    public void fetchDates() {
+
+        StringBuilder url = new StringBuilder();
+        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=");
+        url.append(getId());
+        url.append("&format=json&nojsoncallback=1");
+        String a;
+        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetPhotoInfoLoaded, onGetPhotoInfoError);
+        Flicking.getSharedQueue().add(request);
+    }
+
+    @Ignore
+    private final Response.Listener<String> onGetPhotoInfoLoaded = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+
+            JsonObject object = (JsonObject) new JsonParser().parse(response);
+            JsonElement photo = object.get("photo");
+            JsonObject photoobject = photo.getAsJsonObject();
+            JsonElement dates = (JsonElement) photoobject.get("dates");
+            String created = dates.getAsJsonObject().get("taken").toString();
+            String pep = "a";
+            setTaken(created);
+        }
+    };
+
+    @Ignore
+    private final Response.ErrorListener onGetPhotoInfoError = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            assert true;
+        }
+    };
 
 }

@@ -1,5 +1,7 @@
 package com.baccaventuri.flicking.Data;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import androidx.annotation.Nullable;
@@ -45,12 +47,12 @@ public class DataProvider {
     private Toolbar toolBar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
-    private String opcion;
+
     private String galery =
             "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
 
     public void loadGalleriaUsuario(GalleryAdapter mGalleriesAdapter, Toolbar albumToolbar, FragmentActivity activity) {
-        opcion = "galeria";
+
         this.mGalleriesAdapter = mGalleriesAdapter;
         this.toolBar = albumToolbar;
 
@@ -81,34 +83,32 @@ public class DataProvider {
 
     }
 
-    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter,Album album, Toolbar albumToolbar, FragmentActivity activity) {
+    public void loadPhotoset (AlbumsAdapter mAlbumsAdapter,Album album,Boolean orderByName,Boolean asc, Toolbar albumToolbar, FragmentActivity activity) {
         this.mAlbumsAdapter = mAlbumsAdapter;
         this.toolBar = albumToolbar;
 
         mPhotoViewModel = new ViewModelProvider(activity).get(PhotoViewModel.class);
 
-        mPhotoViewModel.getAllPhotos().observe(activity, new Observer<List<Photo>>() {
+        mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc).observe(activity, new Observer<List<Photo>>() {
             @Override
             public void onChanged(@Nullable final List<Photo> photos) {
-                // Update the cached copy of the words in the adapter.
                 mAlbumsAdapter.updateDataset(photos);
+                mAlbumsAdapter.notifyDataSetChanged();
+
+                if (photos != null) {
+                    for (Photo photo:photos) {
+                        if (photo.getBitmap() == null) {
+                            photo.fetchBitmap(mAlbumsAdapter);
+                            //fetchBipmap(photo.getId());
+                        }
+                    }
+                    mAlbumsAdapter.updateDataset(photos);
+                    mAlbumsAdapter.notifyDataSetChanged();
+                }
             }
         });
 
-        List<Photo> photos = mPhotoViewModel.getAllPhotos().getValue();
-
-        /*if (photos != null) {
-            for (Photo photo:photos) {
-                if (photo.getBitmap() == null) {
-                    //photo.fetchBitmap(mAlbumsAdapter);
-                    fetchBipmap(photo.getId());
-                }
-            }
-            mAlbumsAdapter.updateDataset(photos);
-            mAlbumsAdapter.notifyDataSetChanged();
-        } else {*/
-            fetchPhotoset(album);
-        //}
+        //List<> mPhotoViewModel.getAllPhotos(album.getId(),orderByName,asc)
 
     }
 
@@ -177,6 +177,8 @@ public class DataProvider {
             mAlbumsAdapter.updateDataset(photos);
 
             for (Photo photo:photos) {
+                //photo.fetchDates();
+                photo.setPhotoset(album.getId());
                 mPhotoViewModel.insert(photo);
 
                 if (photo.getBitmap() == null) {

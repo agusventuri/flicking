@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
                     .commitNow();
         }
         pasarAGalleryFrag();
-        //pasarAalbumFrag();
     }
 
 
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, newFragment);
+        transaction.replace(R.id.container, newFragment,"ALBUM");
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
@@ -147,7 +146,11 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
         // guardo los nuevos ajustes
         editor.apply();
-
+        //actualizo fragment album
+        AlbumView frag = (AlbumView) getSupportFragmentManager().findFragmentByTag("ALBUM");
+        if (frag !=null){
+            frag.onResume();
+        }
     }
 
     public void sharePhoto(MenuItem item) {
