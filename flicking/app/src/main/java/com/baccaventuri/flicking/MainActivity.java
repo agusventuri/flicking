@@ -2,6 +2,7 @@ package com.baccaventuri.flicking;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
@@ -17,6 +18,7 @@ import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
     SharedPreferences sharedpreferences;
@@ -31,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         setContentView(R.layout.main_activity);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        myToolbar.setTitle("Álbumes de Josue");
         setSupportActionBar(myToolbar);
 
         sharedpreferences = getSharedPreferences(sortPref,
@@ -47,11 +48,11 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
             editor.apply();
         }
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, SetsView.newInstance())
-                    .commitNow();
-        }
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.container, SetsView.newInstance())
+//                    .commitNow();
+//        }
         pasarAGalleryFrag();
     }
 
@@ -175,5 +176,27 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     @Override
     public void onAlbumClick(Album album)  {
         pasarAalbumFrag(album);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+        boolean handled = false;
+        for(Fragment f : fragmentList) {
+            if(f instanceof GalleryView) {
+                handled = ((GalleryView)f).onBackPressed();
+
+                if(handled) {
+                    finish();
+                    break;
+                }
+            }
+        }
+
+        if(!handled) {
+            super.onBackPressed();
+        }
     }
 }

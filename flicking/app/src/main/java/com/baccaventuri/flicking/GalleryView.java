@@ -2,6 +2,7 @@ package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,5 +93,9 @@ public class GalleryView extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_galeria_view, container, false);
+    }
+
+    public boolean onBackPressed() {
+        return true;
     }
 }
