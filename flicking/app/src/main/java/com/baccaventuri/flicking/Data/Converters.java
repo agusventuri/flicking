@@ -1,5 +1,7 @@
 package com.baccaventuri.flicking.Data;
 
+import android.net.Uri;
+
 import androidx.room.TypeConverter;
 
 import java.util.Date;

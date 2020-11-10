@@ -15,6 +15,7 @@ import com.google.gson.annotations.SerializedName;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -52,6 +53,7 @@ public class Photo {
 
     @Ignore
     private List<Size> size;
+
     @Ignore
     private Bitmap bitmap;
     @SerializedName("bitmapUri")
@@ -61,6 +63,14 @@ public class Photo {
     @SerializedName("taken")
     @Expose
     private Date taken;
+
+    @SerializedName("secret")
+    @Expose
+    private String secret;
+
+    @SerializedName("server")
+    @Expose
+    private String server;
 
     @SerializedName("photoset")
     @Expose
@@ -127,92 +137,31 @@ public class Photo {
         return taken;
     }
 
-
     public void setTaken(Date taken) { this.taken = taken; }
 
-    @Ignore
-    public File filedir;
 
-    public void fetchBitmap(AlbumsAdapter mAdapter, Context context) {
-        this.mAdapter = mAdapter;
-        this.context = context;
-
-        String a;
-        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
-
-        String url = "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" +
-                "6e69c76253dbd558d5bcb0e797676a69" +
-                "&photo_id=" + id +
-                "&format=json&nojsoncallback=1";
-        StringRequest request = new StringRequest(Request.Method.GET, url, onGetSizesLoaded, onGetSizesError);
-        Flicking.getSharedQueue().add(request);
+    public String getSecret() {
+        return secret;
     }
 
-    @Ignore
-    private final Response.Listener<String> onGetSizesLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-            Gson gson = gsonBuilder.create();
-            Sizes sizes = gson.fromJson(response, Sizes.class);
-            size = sizes.getSizes().getSize();
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
-            String url = size.get(6).getSource();
+    public String getServer() {
+        return server;
+    }
 
-            ImageLoader imageLoader = Flicking.getImageLoader();
-            imageLoader.get(url, new ImageLoader.ImageListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    assert true;
-                }
-
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                    if (response.getBitmap() != null) {
-                        bitmap = response.getBitmap();
-                        createCachedFile(getId(),bitmap,filedir);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
-        }
-    };
-
-    @Ignore
-    private final Response.ErrorListener onGetSizesError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            assert true;
-        }
-    };
+    public void setServer(String server) {
+        this.server = server;
+    }
 
     public Bitmap getBitmap() {
         return bitmap;
     }
 
-    @Ignore
-    public File createCachedFile(String fileName, Bitmap image, File filedir) {
-
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            byte[] bArr = bos.toByteArray();
-            bos.flush();
-            bos.close();
-
-            FileOutputStream fos = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            fos.write(bArr);
-            fos.flush();
-            fos.close();
-
-            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), getId() + ".png");
-            return mFile;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
 }

@@ -2,6 +2,7 @@ package com.baccaventuri.flicking.Data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Ignore;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,8 +36,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,7 +105,7 @@ public class DataProvider {
             public void onChanged(@Nullable final List<Photo> photos) {
                 for (Photo photo:photos) {
                     if (photo.getBitmap() == null) {
-                        photo.fetchBitmap(mAlbumsAdapter, getContext());
+                        fetchBitmap(photo);
                     }
                 }
 
@@ -126,37 +130,12 @@ public class DataProvider {
         gson = gsonBuilder.create();
 
         String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=" +
-                //"72157628042948461" +
                 album.getId()+
                 "&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
+        // https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=72157628042948461&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1
         StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotosLoaded, onGetPhotosError);
         Flicking.getSharedQueue().add(request);
     }
-
-    private void fetchGalleriaUsuario() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
-
-        String url =
-                "https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&format=json&nojsoncallback=1";
-        StringRequest request = new StringRequest(Request.Method.GET, url, onGetAlbumsLoaded, onGetAlbumsError);
-        Flicking.getSharedQueue().add(request);
-    }
-
-    private void fetchCommentsPhoto(Photo photo) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-        gson = gsonBuilder.create();
-
-        String url =
-                "https://www.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&" +
-                        "photo_id="+photo.getId()+
-                        "&format=json&nojsoncallback=1";
-        StringRequest request = new StringRequest(Request.Method.GET, url, onGetCommentsLoaded, onGetCommentsError);
-        Flicking.getSharedQueue().add(request);
-    }
-
 
     private final Response.Listener<String> onGetPhotosLoaded = new Response.Listener<String>() {
         @Override
@@ -172,8 +151,7 @@ public class DataProvider {
                 mPhotoViewModel.insert(photo);
 
                 if (photo.getBitmap() == null) {
-                    //fetchBipmap(photo.getId());
-                    photo.fetchBitmap(mAlbumsAdapter, getContext());
+                    fetchBitmap(photo);
                 }
             }
         }
@@ -185,6 +163,17 @@ public class DataProvider {
             //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private void fetchGalleriaUsuario() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+        gson = gsonBuilder.create();
+
+        String url =
+                "https://www.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetAlbumsLoaded, onGetAlbumsError);
+        Flicking.getSharedQueue().add(request);
+    }
 
     private final Response.Listener<String> onGetAlbumsLoaded = new Response.Listener<String>() {
         @Override
@@ -228,6 +217,19 @@ public class DataProvider {
             //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private void fetchCommentsPhoto(Photo photo) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+        gson = gsonBuilder.create();
+
+        String url =
+                "https://www.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&" +
+                        "photo_id="+photo.getId()+
+                        "&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetCommentsLoaded, onGetCommentsError);
+        Flicking.getSharedQueue().add(request);
+    }
 
     private final Response.Listener<String> onGetCommentsLoaded = new Response.Listener<String>() {
         @Override
@@ -304,63 +306,71 @@ public class DataProvider {
     };
 
     //CARGA DE SIZES
-    public void fetchBipmap(String id) {
+    public void fetchBitmap(Photo photo) {
 
         StringBuilder url = new StringBuilder();
-        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=");
-        url.append("6e69c76253dbd558d5bcb0e797676a69");
-        url.append("&photo_id=");
-        url.append(id);
-        url.append("&format=json&nojsoncallback=1");
         String a;
         a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
 
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetSizesLoaded, onGetSizesError);
-        Flicking.getSharedQueue().add(request);
+        url.append("https://live.staticflickr.com/");
+        url.append(photo.getServer());
+        url.append("/");
+        url.append(photo.getId());
+        url.append("_");
+        url.append(photo.getSecret());
+        url.append(".jpg");
+
+        // https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg
+
+
+        ImageLoader imageLoader = Flicking.getImageLoader();
+        imageLoader.get(url.toString(), new ImageLoader.ImageListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                assert true;
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+                if (response.getBitmap() != null) {
+                    Bitmap bitmap = response.getBitmap();
+                    File f = createCachedFile(photo.getId(), bitmap);
+                    Log.d("UURI", Uri.fromFile(f).toString());
+                    photo.setBitmapUri(Uri.fromFile(f).toString());
+                    photo.setBitmap(bitmap);
+                    mPhotoViewModel.update(photo);
+                    mAlbumsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+//        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetJpgLoaded, onGetJpgError);
+//        Flicking.getSharedQueue().add(request);
     }
 
-    private final Response.Listener<String> onGetSizesLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-            Gson gson = gsonBuilder.create();
-            Sizes sizes = gson.fromJson(response, Sizes.class);
-            List<Size> size = sizes.getSizes().getSize();
+    @Ignore
+    public File createCachedFile(String fileName, Bitmap image) {
 
-            String url = size.get(6).getSource();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            byte[] bArr = bos.toByteArray();
+            bos.flush();
+            bos.close();
 
-            ImageLoader imageLoader = Flicking.getImageLoader();
-            imageLoader.get(url, new ImageLoader.ImageListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    assert true;
-                }
+            FileOutputStream fos = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            fos.write(bArr);
+            fos.flush();
+            fos.close();
 
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                    if (response.getBitmap() != null) {
-                        Bitmap bitmap = response.getBitmap();
-                        //if (opcion == "galeria"){
-                        //    mGalleriesAdapter.notifyDataSetChanged();
-                        //}else{
-                            mAlbumsAdapter.notifyDataSetChanged();
-                        //}
-
-                    }
-                }
-            });
+            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), fileName + ".png");
+            return mFile;
         }
-    };
-
-
-    private final Response.ErrorListener onGetSizesError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            assert true;
+        catch (IOException e) {
+            e.printStackTrace();
         }
-    };
-
+        return null;
+    }
 
 
     /*public void showPrimaryImage(Gallery gallery, ImageView view){
