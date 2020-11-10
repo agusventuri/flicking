@@ -28,12 +28,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
+        TextView myDateView;
         ImageView myImageView;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.album_item_name);
+            myDateView = itemView.findViewById(R.id.album_item_date);
             myImageView = itemView.findViewById(R.id.album_item_image);
             itemView.setOnClickListener(this);
         }
@@ -57,6 +59,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Photo photo = mData.get(position);
         holder.myTextView.setText(photo.getTitle());
+        holder.myDateView.setText(photo.getTakenString());
         holder.myImageView.setImageBitmap(photo.getBitmap());
     }
 

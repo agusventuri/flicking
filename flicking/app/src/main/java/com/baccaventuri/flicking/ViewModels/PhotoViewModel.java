@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.baccaventuri.flicking.Data.PhotoRepository;
 import com.baccaventuri.flicking.Models.Photo;
 
+import java.util.Date;
 import java.util.List;
 
 public class PhotoViewModel extends AndroidViewModel {
@@ -41,5 +42,14 @@ public class PhotoViewModel extends AndroidViewModel {
 
     public void insert(Photo photo) {
         mRepository.insert(photo);
+    }
+
+    public void update(Date created, String id) {
+        for (Photo photo : mAllPhotos.getValue()){
+            if (photo.getId().equals(id.toString())) {
+                photo.setTaken(created);
+                mRepository.update(photo);
+            }
+        }
     }
 }

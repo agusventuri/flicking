@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.baccaventuri.flicking.Models.Photo;
 
@@ -30,6 +31,9 @@ public interface PhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Photo photo);
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    void update(Photo photo);
 
     @Query("DELETE FROM Photos")
     void deleteAll();

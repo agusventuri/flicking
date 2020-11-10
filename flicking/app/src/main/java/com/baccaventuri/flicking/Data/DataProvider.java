@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Ignore;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -36,7 +37,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DataProvider {
@@ -177,7 +181,7 @@ public class DataProvider {
             List<Photo> photos = album.getPhoto();
 
             for (Photo photo:photos) {
-                //photo.fetchDates();
+                fetchDates(photo);
                 photo.setPhotoset(album.getId());
                 mPhotoViewModel.insert(photo);
 
@@ -242,6 +246,7 @@ public class DataProvider {
                 }
             }
             mPhotoAdapter.updateDataset(comentarios);
+            mPhotoAdapter.notifyDataSetChanged();
         }
     };
 
@@ -249,6 +254,52 @@ public class DataProvider {
         @Override
         public void onErrorResponse(VolleyError error) {
             //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //carga de fechas
+    public void fetchDates(Photo photo) {
+
+        StringBuilder url = new StringBuilder();
+        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=");
+        url.append(photo.getId());
+        url.append("&format=json&nojsoncallback=1");
+        String a;
+        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetPhotoInfoLoaded, onGetPhotoInfoError);
+        Flicking.getSharedQueue().add(request);
+    }
+
+    private final Response.Listener<String> onGetPhotoInfoLoaded = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+
+            JsonObject object = (JsonObject) new JsonParser().parse(response);
+            JsonElement photo = object.get("photo");
+            JsonObject photoobject = photo.getAsJsonObject();
+            JsonElement dates = (JsonElement) photoobject.get("dates");
+            String id = photoobject.get("id").toString().replace("\"", "");
+            Date created = null;
+            //2011-09-17 18:22:44
+            try {
+//                created = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2011-09-17 18:22:44");
+                String taken = dates.getAsJsonObject().get("taken").toString();
+                created = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(taken.replace("\"", ""));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            mPhotoViewModel.update(created, id);
+            mAlbumsAdapter.notifyDataSetChanged();
+        }
+    };
+
+    private final Response.ErrorListener onGetPhotoInfoError = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            assert true;
         }
     };
 

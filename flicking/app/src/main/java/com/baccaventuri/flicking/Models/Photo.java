@@ -21,6 +21,7 @@ import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -111,7 +112,17 @@ public class Photo {
         this.bitmapUri = bitmapUri;
     }
 
-    public Date getTaken() { return taken; }
+    public String getTakenString() {
+        if (taken == null) {
+            return "No hay fecha";
+        }
+
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(taken);
+    }
+
+    public Date getTaken() {
+        return taken;
+    }
 
     public void setTaken(Date taken) { this.taken = taken; }
 
@@ -172,44 +183,5 @@ public class Photo {
     public Bitmap getBitmap() {
         return bitmap;
     }
-
-    //carga de fechas
-    public void fetchDates() {
-
-        StringBuilder url = new StringBuilder();
-        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=");
-        url.append(getId());
-        url.append("&format=json&nojsoncallback=1");
-        String a;
-        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
-
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetPhotoInfoLoaded, onGetPhotoInfoError);
-        Flicking.getSharedQueue().add(request);
-    }
-
-    @Ignore
-    private final Response.Listener<String> onGetPhotoInfoLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-
-            JsonObject object = (JsonObject) new JsonParser().parse(response);
-            JsonElement photo = object.get("photo");
-            JsonObject photoobject = photo.getAsJsonObject();
-            JsonElement dates = (JsonElement) photoobject.get("dates");
-            Date created = new Date(dates.getAsJsonObject().get("taken").toString());
-            String pep = "a";
-            setTaken(created);
-        }
-    };
-
-    @Ignore
-    private final Response.ErrorListener onGetPhotoInfoError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            assert true;
-        }
-    };
 
 }

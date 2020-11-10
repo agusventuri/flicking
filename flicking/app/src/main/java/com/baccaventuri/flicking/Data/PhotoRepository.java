@@ -57,12 +57,10 @@ public class PhotoRepository {
         });
     }
 
-/*    void insert(Photo photo) {
-        new Thread() {
-            @Override
-            public void run() {
-                mPhotoDao.insert(photo);
-            }
-        }.start();
-    }*/
+    public void update(Photo photo) {
+        FlickingRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mPhotoDao.update(photo);
+        });
+    }
+
 }
