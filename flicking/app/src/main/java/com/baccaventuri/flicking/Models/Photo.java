@@ -56,6 +56,7 @@ public class Photo {
 
     @Ignore
     private Bitmap bitmap;
+
     @SerializedName("bitmapUri")
     @Expose
     private String bitmapUri;
@@ -138,7 +139,6 @@ public class Photo {
     }
 
     public void setTaken(Date taken) { this.taken = taken; }
-
 
     public String getSecret() {
         return secret;

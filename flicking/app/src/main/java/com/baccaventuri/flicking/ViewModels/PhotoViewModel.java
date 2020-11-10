@@ -1,6 +1,9 @@
 package com.baccaventuri.flicking.ViewModels;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import com.baccaventuri.flicking.Data.PhotoRepository;
 import com.baccaventuri.flicking.Models.Photo;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +32,17 @@ public class PhotoViewModel extends AndroidViewModel {
 
     public LiveData<List<Photo>> getAllPhotos(String album, Boolean orderByName, Boolean asc) {
         mAllPhotos = mRepository.getAllPhotos(album,orderByName,asc);
+        if (mAllPhotos.getValue() != null) {
+            for (Photo photo : mAllPhotos.getValue()) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getApplication().getContentResolver(), Uri.parse(photo.getBitmapUri()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                photo.setBitmap(bitmap);
+            }
+        }
         return mAllPhotos;
     }
 

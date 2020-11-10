@@ -148,7 +148,6 @@ public class DataProvider {
             for (Photo photo:photos) {
                 fetchDates(photo);
                 photo.setPhotoset(album.getId());
-                mPhotoViewModel.insert(photo);
 
                 if (photo.getBitmap() == null) {
                     fetchBitmap(photo);
@@ -305,7 +304,7 @@ public class DataProvider {
         }
     };
 
-    //CARGA DE SIZES
+    //CARGA DE BITMAP
     public void fetchBitmap(Photo photo) {
 
         StringBuilder url = new StringBuilder();
@@ -335,17 +334,14 @@ public class DataProvider {
                 if (response.getBitmap() != null) {
                     Bitmap bitmap = response.getBitmap();
                     File f = createCachedFile(photo.getId(), bitmap);
-                    Log.d("UURI", Uri.fromFile(f).toString());
                     photo.setBitmapUri(Uri.fromFile(f).toString());
                     photo.setBitmap(bitmap);
-                    mPhotoViewModel.update(photo);
+                    Log.d("UURI", photo.getBitmapUri());
+                    mPhotoViewModel.insert(photo);
                     mAlbumsAdapter.notifyDataSetChanged();
                 }
             }
         });
-
-//        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetJpgLoaded, onGetJpgError);
-//        Flicking.getSharedQueue().add(request);
     }
 
     @Ignore
