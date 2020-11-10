@@ -192,7 +192,7 @@ public class Photo {
     }
 
     @Ignore
-    public void createCachedFile(String fileName, Bitmap image, File filedir) {
+    public File createCachedFile(String fileName, Bitmap image, File filedir) {
 
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -205,10 +205,14 @@ public class Photo {
             fos.write(bArr);
             fos.flush();
             fos.close();
+
+            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), getId() + ".png");
+            return mFile;
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }

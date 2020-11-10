@@ -51,7 +51,6 @@ public class DataProvider {
     private Toolbar toolBar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
-    public File filedir;
 
     public Context getContext() {
         return context;
@@ -102,9 +101,7 @@ public class DataProvider {
             public void onChanged(@Nullable final List<Photo> photos) {
                 for (Photo photo:photos) {
                     if (photo.getBitmap() == null) {
-                        photo.filedir = filedir;
                         photo.fetchBitmap(mAlbumsAdapter, getContext());
-                        //fetchBipmap(photo.getId());
                     }
                 }
 

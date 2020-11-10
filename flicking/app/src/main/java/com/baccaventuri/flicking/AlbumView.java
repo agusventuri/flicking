@@ -120,7 +120,6 @@ public class AlbumView extends Fragment {
             }
         }
         dataProvider.loadPhotoset(mAdapter,album,orderByName,asc, toolbar, getActivity());
-        dataProvider.filedir = requireContext().getFilesDir();
         dataProvider.setContext(getContext());
 
         albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
