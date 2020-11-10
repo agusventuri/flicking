@@ -76,7 +76,6 @@ public class PhotoView extends Fragment {
         //lleno datos photo
         ImageView imageView = getActivity().findViewById(R.id.photo);
         imageView.setImageBitmap(photo.getBitmap());
-        TextView descrip = getActivity().findViewById(R.id.description);
         //descrip.setText(photo.get);
 
         photoRecyclerView = getActivity().findViewById(R.id.commentRecyclerView);

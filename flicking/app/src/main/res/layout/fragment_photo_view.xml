@@ -14,30 +14,16 @@
             android:src="@drawable/montania"
             tools:layout_editor_absoluteY="206dp" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:background="#80000000"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="Descripción  de imagen"
-            android:textColor="#FFF"
-            tools:text="Melbourne CBD" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android.id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/photo"
-        android:layout_alignBottom="@+id/photo"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="-306dp">
+        android:layout_marginBottom="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/commentRecyclerView"
