@@ -53,6 +53,16 @@ public class DataProvider {
     private AlbumViewModel mAlbumViewModel;
     public File filedir;
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Context context;
+
     private String galery =
             "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
 
@@ -93,7 +103,7 @@ public class DataProvider {
                 for (Photo photo:photos) {
                     if (photo.getBitmap() == null) {
                         photo.filedir = filedir;
-                        photo.fetchBitmap(mAlbumsAdapter);
+                        photo.fetchBitmap(mAlbumsAdapter, getContext());
                         //fetchBipmap(photo.getId());
                     }
                 }
@@ -166,7 +176,7 @@ public class DataProvider {
 
                 if (photo.getBitmap() == null) {
                     //fetchBipmap(photo.getId());
-                    photo.fetchBitmap(mAlbumsAdapter);
+                    photo.fetchBitmap(mAlbumsAdapter, getContext());
                 }
             }
         }

@@ -17,7 +17,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -66,10 +68,11 @@ public class Photo {
 
     @ForeignKey(entity = Album.class, parentColumns = "id", childColumns = "id_photoset")
 
-
-
     @Ignore
     private AlbumsAdapter mAdapter;
+
+    @Ignore
+    private Context context;
 
     @NonNull
     public String getId() {
@@ -130,8 +133,9 @@ public class Photo {
     @Ignore
     public File filedir;
 
-    public void fetchBitmap(AlbumsAdapter mAdapter) {
+    public void fetchBitmap(AlbumsAdapter mAdapter, Context context) {
         this.mAdapter = mAdapter;
+        this.context = context;
 
         String a;
         a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
@@ -167,7 +171,7 @@ public class Photo {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         bitmap = response.getBitmap();
-                        createCachedFile("imagetest",bitmap,filedir);
+                        createCachedFile(getId(),bitmap,filedir);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -188,29 +192,19 @@ public class Photo {
     }
 
     @Ignore
-    public static void createCachedFile(String fileName, Bitmap image,File filedir) {
-/*        try {
-            File file = new File(filedir, fileName);
+    public void createCachedFile(String fileName, Bitmap image, File filedir) {
 
-            if (!file.exists()) {
-                FileOutputStream fos = new FileOutputStream(file);
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            byte[] bArr = bos.toByteArray();
+            bos.flush();
+            bos.close();
 
-*//*                OutputStreamWriter outputWriter=new OutputStreamWriter(fos);
-                outputWriter.flush();
-                outputWriter.close();*//*
-
-                fos.flush();
-                fos.close();
-
-            }
-        } catch (Exception e) {
-            Log.e("saveTempFile()", Objects.requireNonNull(e.getMessage()));
-        }*/
-
-        try (FileOutputStream out = new FileOutputStream(fileName)) {
-            image.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            FileOutputStream fos = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            fos.write(bArr);
+            fos.flush();
+            fos.close();
         }
         catch (IOException e) {
             e.printStackTrace();
