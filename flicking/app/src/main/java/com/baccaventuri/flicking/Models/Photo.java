@@ -9,30 +9,19 @@ import com.baccaventuri.flicking.AlbumsAdapter;
 import com.baccaventuri.flicking.Flicking;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.util.Log;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.ForeignKey;
 import androidx.annotation.NonNull;
 
-import static android.content.ContentValues.TAG;
 
 @Entity(tableName = "Photos")
 public class Photo {
@@ -72,6 +61,7 @@ public class Photo {
     @Ignore
     private AlbumsAdapter mAdapter;
 
+    @NonNull
     public String getId() {
         return id;
     }
@@ -129,16 +119,14 @@ public class Photo {
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
 
-        StringBuilder url = new StringBuilder();
-        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=");
-        url.append("6e69c76253dbd558d5bcb0e797676a69");
-        url.append("&photo_id=");
-        url.append(id);
-        url.append("&format=json&nojsoncallback=1");
         String a;
         a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
 
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetSizesLoaded, onGetSizesError);
+        String url = "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" +
+                "6e69c76253dbd558d5bcb0e797676a69" +
+                "&photo_id=" + id +
+                "&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetSizesLoaded, onGetSizesError);
         Flicking.getSharedQueue().add(request);
     }
 
