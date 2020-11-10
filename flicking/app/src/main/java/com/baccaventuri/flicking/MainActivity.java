@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         }
     }
 
-    public void sharePhoto(MenuItem item) {
+/*    public void sharePhoto(MenuItem item) {
 
         File newFile = new File("android.resource://com.baccaventuri.flicking/drawable", "montania.png");
         Uri imageUri = Uri.parse("https://i.pinimg.com/originals/91/c3/89/91c3894f5d1c0585cde7b66750a32062.png");
@@ -162,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         shareIntent.setType("image/*");
         startActivity(Intent.createChooser(shareIntent, "Compartir foto"));
     }
+    */
+
 
     @Override
     public void onPhotoClick(Photo photo) {

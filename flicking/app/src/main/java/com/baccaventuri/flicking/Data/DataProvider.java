@@ -1,6 +1,8 @@
 package com.baccaventuri.flicking.Data;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -32,6 +34,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +51,7 @@ public class DataProvider {
     private Toolbar toolBar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
+    public File filedir;
 
     private String galery =
             "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
@@ -74,7 +79,6 @@ public class DataProvider {
                 mGalleriesAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
     public void loadPhotoset (AlbumsAdapter mAlbumsAdapter,Album album,Boolean orderByName,Boolean asc, Toolbar albumToolbar, FragmentActivity activity) {
@@ -88,6 +92,7 @@ public class DataProvider {
             public void onChanged(@Nullable final List<Photo> photos) {
                 for (Photo photo:photos) {
                     if (photo.getBitmap() == null) {
+                        photo.filedir = filedir;
                         photo.fetchBitmap(mAlbumsAdapter);
                         //fetchBipmap(photo.getId());
                     }
@@ -348,6 +353,8 @@ public class DataProvider {
             assert true;
         }
     };
+
+
 
     /*public void showPrimaryImage(Gallery gallery, ImageView view){
         String photoId = gallery.getPages();

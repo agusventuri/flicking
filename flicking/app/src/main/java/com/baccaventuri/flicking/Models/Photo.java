@@ -6,15 +6,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.AlbumsAdapter;
+import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Flicking;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -114,7 +124,11 @@ public class Photo {
         return taken;
     }
 
+
     public void setTaken(Date taken) { this.taken = taken; }
+
+    @Ignore
+    public File filedir;
 
     public void fetchBitmap(AlbumsAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -153,6 +167,7 @@ public class Photo {
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
                         bitmap = response.getBitmap();
+                        createCachedFile("imagetest",bitmap,filedir);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -170,6 +185,36 @@ public class Photo {
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    @Ignore
+    public static void createCachedFile(String fileName, Bitmap image,File filedir) {
+/*        try {
+            File file = new File(filedir, fileName);
+
+            if (!file.exists()) {
+                FileOutputStream fos = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+*//*                OutputStreamWriter outputWriter=new OutputStreamWriter(fos);
+                outputWriter.flush();
+                outputWriter.close();*//*
+
+                fos.flush();
+                fos.close();
+
+            }
+        } catch (Exception e) {
+            Log.e("saveTempFile()", Objects.requireNonNull(e.getMessage()));
+        }*/
+
+        try (FileOutputStream out = new FileOutputStream(fileName)) {
+            image.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

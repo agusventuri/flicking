@@ -20,6 +20,7 @@ import com.baccaventuri.flicking.Models.Photo;
 import android.content.SharedPreferences;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,6 +120,7 @@ public class AlbumView extends Fragment {
             }
         }
         dataProvider.loadPhotoset(mAdapter,album,orderByName,asc, toolbar, getActivity());
+        dataProvider.filedir = requireContext().getFilesDir();
 
         albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
