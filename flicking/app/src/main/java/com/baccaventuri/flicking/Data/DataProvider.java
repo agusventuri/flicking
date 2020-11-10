@@ -66,26 +66,19 @@ public class DataProvider {
         mAlbumViewModel.getAllAlbums().observe(activity, new Observer<List<Album>>() {
             @Override
             public void onChanged(@Nullable final List<Album> albums) {
-                // Update the cached copy of the words in the adapter.
+                for (Album album:albums) {
+                    if (album.getBitmap() == null) {
+                        //fetchBipmap(album.getPrimary());
+                        album.fetchBitmap(mGalleriesAdapter);
+                    }
+                }
+                if (mAlbumViewModel.isEmpty()) {
+                    fetchGalleriaUsuario();
+                }
                 mGalleriesAdapter.updateDataset(albums);
                 mGalleriesAdapter.notifyDataSetChanged();
             }
         });
-
-        List<Album> albums = mAlbumViewModel.getAllAlbums().getValue();
-
-        if (albums != null) {
-            for (Album album:albums) {
-                if (album.getBitmap() == null) {
-                    //fetchBipmap(album.getPrimary());
-                    album.fetchBitmap(mGalleriesAdapter);
-                }
-            }
-            mGalleriesAdapter.updateDataset(albums);
-            mGalleriesAdapter.notifyDataSetChanged();
-        } else {
-            fetchGalleriaUsuario();
-        }
 
     }
 

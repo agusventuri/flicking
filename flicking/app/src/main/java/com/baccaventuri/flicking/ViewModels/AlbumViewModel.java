@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking.ViewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -27,6 +28,15 @@ public class AlbumViewModel extends AndroidViewModel {
 
     public LiveData<List<Album>> getAllAlbums() {
         return mAllPhotoSet;
+    }
+
+    public Boolean isEmpty () {
+        try {
+            return mAllPhotoSet.getValue().isEmpty();
+        } catch (NullPointerException e) {
+            Log.d("exception photoset", e.getMessage() + "");
+        }
+        return true;
     }
 
     public void insert(Album album) {
