@@ -43,15 +43,13 @@ public class Album {
     private String ownername;
 
     @SerializedName("photo")
-    //@Expose
     @Ignore
     private List<Photo> photo;
 
     @SerializedName("title")
-//    @Expose
-//    private String title;
-    @Ignore
-    private Title title;
+    @Expose
+    private String title;
+
     @SerializedName("total")
     @Expose
     private String total;
@@ -107,18 +105,11 @@ public class Album {
     public void setPhoto(List<Photo> photo) {
         this.photo = photo;
     }
-//
-//    public String getTitle() { return title; }
-//
-//    public void setTitle(String title) { this.title = title; }
-    public String getTitle() {
-        if (title == null){
-            return "";
-        }else{
-            return title.getContent();
-        }
-    }
-    public void setTitle(String title) { this.title.setContent(title);}
+
+    public String getTitle() { return title; }
+
+    public void setTitle(String title) { this.title = title; }
+
 
     public String getTotal() {
         return total;

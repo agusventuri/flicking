@@ -1,16 +1,12 @@
 package com.baccaventuri.flicking.Data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Ignore;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,7 +22,6 @@ import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Size;
 import com.baccaventuri.flicking.Models.Sizes;
-import com.baccaventuri.flicking.Models.Title;
 import com.baccaventuri.flicking.PhotoAdapter;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
@@ -105,9 +100,7 @@ public class DataProvider {
                 mAlbumsAdapter.updateDataset(photos);
                 mAlbumsAdapter.notifyDataSetChanged();
             }
-
         });
-
     }
 
     public void loadPhoto(PhotoAdapter mPhotoAdapter,Photo photo, FragmentActivity activity) {
@@ -157,19 +150,7 @@ public class DataProvider {
         @Override
         public void onResponse(String response) {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
-
-            //convierto el json de album que recibo con campo title con un string,
-            //a un json con campo title como {content:"mytitle"}, que es como
-            //está hecho el modelo album
             JsonObject objphotoset = object.getAsJsonObject("photoset");
-            JsonElement objtit = objphotoset.get("title");
-            Title titulo = new Title();
-            titulo.setContent(objtit.toString());
-            String tit = gson.toJson(titulo);
-            JsonElement titjson = new JsonParser().parse(tit);
-            objphotoset.add("title",titjson);
-
-            //obtengo album object oon formato correcto
             Album album = gson.fromJson(objphotoset, Album.class);
             List<Photo> photos = album.getPhoto();
 
@@ -198,6 +179,20 @@ public class DataProvider {
         public void onResponse(String response) {
             JsonObject object = (JsonObject) new JsonParser().parse(response);
             JsonElement object1 = object.get("photosets");
+            JsonObject object2 = object1.getAsJsonObject();
+            JsonElement list= object2.get("photoset");
+            JsonArray listaalb = list.getAsJsonArray();
+
+            //convierto cada title de cada album, en un string,
+            //se esta recibiendo un title asi: "title":{"_content":"Italy"}
+            for (JsonElement album : listaalb) {
+                JsonObject objalb = album.getAsJsonObject();
+                JsonElement tit = objalb.get("title");
+                JsonObject tit2 = tit.getAsJsonObject();
+                JsonElement titulo = tit2.get("_content");
+                objalb.remove("title");
+                objalb.add("title",titulo);
+            }
 
             Gallery gallery = gson.fromJson(object1, Gallery.class);
 

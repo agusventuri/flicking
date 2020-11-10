@@ -48,11 +48,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
             editor.apply();
         }
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.container, SetsView.newInstance())
-//                    .commitNow();
-//        }
         pasarAGalleryFrag();
     }
 
