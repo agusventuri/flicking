@@ -187,20 +187,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         }
     }
 
-/*    public void sharePhoto(MenuItem item) {
-
-        File newFile = new File("android.resource://com.baccaventuri.flicking/drawable", "montania.png");
-        Uri imageUri = Uri.parse("https://i.pinimg.com/originals/91/c3/89/91c3894f5d1c0585cde7b66750a32062.png");
-
-        Intent shareIntent = new Intent();
-
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, "Compartir foto"));
-    }*/
-
-
     @Override
     public void onPhotoClick(Photo photo) {
         pasarAPhotoFrag(photo);
@@ -252,9 +238,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
 
-        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
-            return false;
-        }
-        return true;
+        return netInfo != null && netInfo.isConnected() && netInfo.isAvailable();
     }
 }
