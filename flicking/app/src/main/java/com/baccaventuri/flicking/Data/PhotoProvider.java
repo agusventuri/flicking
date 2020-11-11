@@ -11,13 +11,18 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 public class PhotoProvider extends ContentProvider {
     static final String PROVIDER_NAME = "com.tdam.contentprovider.PhotoProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/Photos";
     static final Uri CONTENT_URI = Uri.parse(URL);
+    private static final String CLASS_NAME = "PhotoProvider";
 
     static final String id = "id";
     static final String title = "title";
@@ -109,6 +114,29 @@ public class PhotoProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
+
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+
+        String LOG_TAG = CLASS_NAME + " - openFile";
+
+        Log.i(LOG_TAG, "Called with uri: '" + uri + "'." + uri.getLastPathSegment());
+
+        switch (uriMatcher.match(uri)) {
+
+            case 1:
+                String fileLocation = getContext().getFilesDir() + File.separator + uri.getLastPathSegment();
+
+                ParcelFileDescriptor image = ParcelFileDescriptor.open(new File(fileLocation), ParcelFileDescriptor.MODE_READ_ONLY);
+
+                return image;
+
+            default:
+                Log.i(LOG_TAG, "Unsupported uri: '" + uri + "'.");
+                throw new FileNotFoundException("Unsupported uri: " + uri.toString());
+        }
+    }
+
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "EmpDB";
     static final String TABLE_NAME = "Employees";

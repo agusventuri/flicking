@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Flicking"
@@ -16,14 +17,31 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="text/*" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" /> &lt;!&ndash; Send
+         action required to display activity in share list &ndash;&gt;
+                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash;
+          Make activity default to launch &ndash;&gt;
+                &lt;!&ndash; Mime type i.e. what can be shared with this activity only image and text &ndash;&gt;
+                <data android:mimeType="image/*" />
+                <data android:mimeType="text/*" />
+            </intent-filter>-->
         </activity>
         <provider
-            android:authorities="com.tdam.contentprovider.PhotoProvider"
-            android:name=".Data.PhotoProvider">
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.baccaventuri.flicking.Data.PhotoProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 
 </manifest>

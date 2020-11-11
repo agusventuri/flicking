@@ -9,17 +9,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.net.URI;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
@@ -62,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, newFragment);
+        transaction.replace(R.id.container, newFragment,"PHOTO");
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
@@ -152,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         }
     }
 
-    public void sharePhoto(MenuItem item) {
+/*    public void sharePhoto(MenuItem item) {
 
         File newFile = new File("android.resource://com.baccaventuri.flicking/drawable", "montania.png");
         Uri imageUri = Uri.parse("https://i.pinimg.com/originals/91/c3/89/91c3894f5d1c0585cde7b66750a32062.png");
@@ -163,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("image/*");
         startActivity(Intent.createChooser(shareIntent, "Compartir foto"));
-    }
+    }*/
 
 
     @Override
@@ -196,5 +204,20 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         if(!handled) {
             super.onBackPressed();
         }
+    }
+
+    public void sharePhoto(MenuItem item) {
+        PhotoView frag = (PhotoView) getSupportFragmentManager().findFragmentByTag("PHOTO");
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+
+        Uri imageUri = Uri.parse("content://" + "com.tdam.contentprovider.PhotoProvider" + File.separator + "Photos" + File.separator + frag.photo.getBitmapUri());
+        shareIntent.setAction(Intent.ACTION_SEND);
+        //Target whatsapp:
+        // shareIntent.setPackage("com.whatsapp");
+        //Add Image URI
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(shareIntent);
     }
 }

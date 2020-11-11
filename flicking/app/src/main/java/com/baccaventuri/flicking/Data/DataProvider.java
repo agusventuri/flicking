@@ -359,7 +359,7 @@ public class DataProvider {
             fos.flush();
             fos.close();
 
-            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), fileName + ".png");
+            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), fileName + ".jpg");
             return mFile;
         }
         catch (IOException e) {
