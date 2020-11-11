@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.baccaventuri.flicking.Models.Album;
 
@@ -20,6 +21,9 @@ public interface AlbumDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Album album);
+
+    @Update()
+    void update(Album album);
 
     @Query("DELETE FROM Albums")
     void deleteAll();

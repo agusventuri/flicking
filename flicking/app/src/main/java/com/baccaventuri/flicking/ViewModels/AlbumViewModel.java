@@ -42,4 +42,8 @@ public class AlbumViewModel extends AndroidViewModel {
     public void insert(Album album) {
         mRepository.insert(album);
     }
+
+    public void update(Album album) {
+        mRepository.update(album);
+    }
 }

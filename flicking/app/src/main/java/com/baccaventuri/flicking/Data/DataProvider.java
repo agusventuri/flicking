@@ -83,6 +83,8 @@ public class DataProvider {
                     if (album.getBitmap() == null) {
                         //fetchBipmap(album.getPrimary());
                         album.fetchBitmap(mGalleriesAdapter);
+                        mAlbumViewModel.update(album);
+                        String a = "a";
                     }
                 }
                 if (mAlbumViewModel.isEmpty()) {

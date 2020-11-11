@@ -32,4 +32,10 @@ public class AlbumRepository {
             mAlbumDao.insert(album);
         });
     }
+
+    public void update(Album album) {
+        FlickingRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mAlbumDao.update(album);
+        });
+    }
 }

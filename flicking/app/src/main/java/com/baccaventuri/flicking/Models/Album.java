@@ -19,6 +19,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.baccaventuri.flicking.Flicking;
 import com.baccaventuri.flicking.GalleryAdapter;
+import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -32,9 +33,15 @@ public class Album {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("primary")
     @Expose
     private String primary;
+
+    @SerializedName("uriPrimary")
+    @Expose
+    private String uriPrimary;
+
     @SerializedName("owner")
     @Expose
     private String owner;
@@ -74,6 +81,13 @@ public class Album {
         this.id = id;
     }
 
+    public String getUriPrimary() {
+        return uriPrimary;
+    }
+
+    public void setUriPrimary(String uriPrimary) {
+        this.uriPrimary = uriPrimary;
+    }
     public String getPrimary() {
         return primary;
     }
@@ -118,6 +132,9 @@ public class Album {
     public void setTotal(String total) {
         this.total = total;
     }
+
+    @Ignore
+    public AlbumViewModel albumViewModel;
 
     public void setBitmap(Bitmap bitmap) { this.bitmap = bitmap; }
 
@@ -164,6 +181,8 @@ public class Album {
                     Log.d("OUTSIDE",response.toString());
                     if (response.getBitmap() != null) {
                         bitmap = response.getBitmap();
+                        setUriPrimary(response.getRequestUrl());
+                        setBitmap(bitmap);
                         Log.d("INSIDE",bitmap.toString());
                         mAdapter.notifyDataSetChanged();
                     }
