@@ -18,7 +18,6 @@ import java.util.List;
 public class ItemsAlbumesAdapter extends
         RecyclerView.Adapter<ItemsAlbumesAdapter.ViewHolder> {
 
-    public ImageView imagen;
     public TextView name;
 
     @NonNull
@@ -32,8 +31,7 @@ public class ItemsAlbumesAdapter extends
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(itemAlbumView);
-//        imagen = (ImageView) viewHolder.itemView.findViewById(R.id.album_item_imageView);
-        name = (TextView) viewHolder.itemView.findViewById(R.id.album_item_name);
+        name = viewHolder.itemView.findViewById(R.id.album_item_name);
 
         return viewHolder;
     }
@@ -70,8 +68,7 @@ public class ItemsAlbumesAdapter extends
 
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.album_item_name);
-//            image = (ImageView) itemView.findViewById(R.id.album_item_imageView);
+            nameTextView = itemView.findViewById(R.id.album_item_name);
         }
     }
     private List<ItemAlbumes> mItems;

@@ -17,7 +17,6 @@ public interface AlbumDao {
     //@Transaction
     @Query("SELECT * from Albums")
     LiveData<List<Album>> getAlbums();
-    //public List<AlbumPhotos> getAlbums();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Album album);

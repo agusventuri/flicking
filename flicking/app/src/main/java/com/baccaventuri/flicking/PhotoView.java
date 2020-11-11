@@ -1,12 +1,7 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,27 +11,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baccaventuri.flicking.Data.DataProvider;
-import com.baccaventuri.flicking.Data.PhotoProvider;
 import com.baccaventuri.flicking.Models.Comment;
 import com.baccaventuri.flicking.Models.Photo;
 
-import java.io.File;
-import java.util.List;
-import java.util.Objects;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PhotoView} factory method to
- * create an instance of this fragment.
- */
 public class PhotoView extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -49,24 +31,17 @@ public class PhotoView extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
 
     // TODO: Rename and change types of parameters
-    private String name;
-    private Drawable image;
     public Photo photo;
-    private List<Comment> comentarios;
 
     public PhotoView(Photo photo) {
         // Required empty public constructor
         this.photo = photo;
-        //this.comentarios
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            name = getArguments().getString(ARG_PARAM1);
-        }
-        mAdapter = new PhotoAdapter(getContext(), comentarios);
+        mAdapter = new PhotoAdapter(getContext(), null);
 
         DataProvider dataProvider = new DataProvider();
         dataProvider.loadPhoto(mAdapter,photo, getActivity());

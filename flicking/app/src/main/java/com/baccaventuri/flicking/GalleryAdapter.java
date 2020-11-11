@@ -40,7 +40,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
         @Override
         public void onClick(View view) {
-            //if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             mClickListener.onAlbumClick(mData.get(getAdapterPosition()));
         }
     }

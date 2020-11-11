@@ -21,11 +21,6 @@ import android.content.SharedPreferences;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AlbumView} factory method to
- * create an instance of this fragment.
- */
 public class AlbumView extends Fragment {
 
     private RecyclerView albumRecyclerView;

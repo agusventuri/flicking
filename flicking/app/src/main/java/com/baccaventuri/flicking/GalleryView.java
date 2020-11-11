@@ -13,10 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.baccaventuri.flicking.Data.DataProvider;
-import com.baccaventuri.flicking.Models.Gallery;
-import com.baccaventuri.flicking.Models.Album;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,7 +46,7 @@ public class GalleryView extends Fragment {
             mNotificationUtils.getManager().notify(101, nb.build());
         }
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
 
 
@@ -62,7 +58,7 @@ public class GalleryView extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle("Albumes de josue");

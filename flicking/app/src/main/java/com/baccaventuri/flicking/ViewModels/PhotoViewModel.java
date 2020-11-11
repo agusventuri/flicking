@@ -67,8 +67,4 @@ public class PhotoViewModel extends AndroidViewModel {
             }
         }
     }
-
-    public void update(Photo photo) {
-        mRepository.update(photo);
-    }
 }
