@@ -40,8 +40,8 @@ public class GalleryView extends Fragment {
             NotificationUtils mNotificationUtils = new NotificationUtils(activity);
 
             Notification.Builder nb = mNotificationUtils.
-                    getAndroidChannelNotification("No se ha podido establecer conexión a internet",
-                            "La galería cargada podría no estar actualizada");
+                    getAndroidChannelNotification(getString(R.string.offline),
+                            getString(R.string.offlineGallery));
 
             mNotificationUtils.getManager().notify(101, nb.build());
         }

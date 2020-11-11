@@ -55,8 +55,8 @@ public class AlbumView extends Fragment {
             NotificationUtils mNotificationUtils = new NotificationUtils(activity);
 
             Notification.Builder nb = mNotificationUtils.
-                    getAndroidChannelNotification("No se ha podido establecer conexión a internet",
-                            "El álbum cargado podría no estar actualizado");
+                    getAndroidChannelNotification(getString(R.string.offline),
+                            getString(R.string.offlineAlbum));
 
             mNotificationUtils.getManager().notify(101, nb.build());
         }
