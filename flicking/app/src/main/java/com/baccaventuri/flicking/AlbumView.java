@@ -23,9 +23,7 @@ import java.util.List;
 
 public class AlbumView extends Fragment {
 
-    private RecyclerView albumRecyclerView;
     private AlbumsAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     private List<Photo> photos;
     private Album album;
@@ -37,9 +35,6 @@ public class AlbumView extends Fragment {
     public static final String SortPicsByNameKey = "SortPicsByName";
     public static final String SortPicsByNameAscKey = "SortPicsByNameAsc";
     public static final String SortPicsByDateAscKey = "SortPicsByDateAsc";
-
-    private Boolean orderByName;
-    private Boolean asc;
 
     public AlbumView(Album album, MainActivity activity) {
         // Required empty public constructor
@@ -68,7 +63,7 @@ public class AlbumView extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.menu_album);
         toolbar.setTitle(album.getTitle());
@@ -78,28 +73,22 @@ public class AlbumView extends Fragment {
 
         //obtengo que tipo de orden es
         //si es orden x nombre...
+        boolean orderByName;
+        boolean asc;
         if(sharedpreferences.getBoolean(SortPicsByNameKey,true)){
-            orderByName=true;
-            if (sharedpreferences.getBoolean(SortPicsByNameAscKey,true)){
-                asc=true;
-            }else{
-                asc=false;
-            }
+            orderByName =true;
+            asc = sharedpreferences.getBoolean(SortPicsByNameAscKey, true);
             //si es orden x fecha...
         }else{
-            orderByName=false;
-            if (sharedpreferences.getBoolean(SortPicsByDateAscKey,true)){
-                asc=true;
-            }else{
-                asc=false;
-            }
+            orderByName =false;
+            asc = sharedpreferences.getBoolean(SortPicsByDateAscKey, true);
         }
 
         dataProvider.setContext(getContext());
-        dataProvider.loadPhotoset(mAdapter,album,orderByName,asc, toolbar, getActivity());
+        dataProvider.loadPhotoset(mAdapter,album, orderByName, asc, toolbar, getActivity());
 
-        albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView albumRecyclerView = getActivity().findViewById(R.id.albumRecyclerView);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         albumRecyclerView.setLayoutManager(layoutManager);
         albumRecyclerView.setAdapter(mAdapter);
     }
@@ -112,7 +101,7 @@ public class AlbumView extends Fragment {
     }
 
     public void cargarFotos (){
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_album);
 
         //preferencias para ordenamiento
