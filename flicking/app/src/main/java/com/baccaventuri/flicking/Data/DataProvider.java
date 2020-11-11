@@ -1,9 +1,11 @@
 package com.baccaventuri.flicking.Data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -53,6 +55,8 @@ public class DataProvider {
     private Toolbar toolBar;
     private PhotoViewModel mPhotoViewModel;
     private AlbumViewModel mAlbumViewModel;
+    SharedPreferences sharedpreferences;
+    boolean refreshAll;
 
     public Context getContext() {
         return context;
@@ -60,6 +64,11 @@ public class DataProvider {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setSharedPreferences(SharedPreferences sharedpreferences) {
+        this.sharedpreferences = sharedpreferences;
+        this.refreshAll = sharedpreferences.getBoolean("RefreshAll", true);
     }
 
     public Context context;
@@ -82,7 +91,8 @@ public class DataProvider {
                         fetchBitmap(album);
                     }
                 }
-                if (mAlbumViewModel.isEmpty()) {
+                if (mAlbumViewModel.isEmpty() || refreshAll) {
+                    Toast.makeText(activity, "Descargando galería...", Toast.LENGTH_SHORT).show();
                     fetchGalleriaUsuario();
                 }
                 mGalleriesAdapter.updateDataset(albums);
@@ -106,7 +116,8 @@ public class DataProvider {
                     }
                 }
 
-                if (mPhotoViewModel.isEmpty()) {
+                if (mPhotoViewModel.isEmpty() || refreshAll) {
+                    Toast.makeText(activity, "Descargando album...", Toast.LENGTH_SHORT).show();
                     fetchPhotoset(album);
                 }
 

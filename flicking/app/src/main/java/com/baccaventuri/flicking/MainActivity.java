@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,6 +21,9 @@ import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
@@ -28,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     public static final String SortPicsByNameKey = "SortPicsByName";
     public static final String SortPicsByNameAscKey = "SortPicsByNameAsc";
     public static final String SortPicsByDateAscKey = "SortPicsByDateAsc";
+    public static final String LastStartup = "LastStartup";
+    public static final String RefreshAll = "RefreshAll";
+    public static final String RefreshOne = "null";
     public DataProvider dp;
 
     @Override
@@ -35,24 +42,47 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        sharedpreferences = getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+
         dp = new DataProvider();
         dp.setContext(getApplicationContext());
+        dp.setSharedPreferences(sharedpreferences);
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        sharedpreferences = getSharedPreferences(sortPref,
-                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
 
         if (!sharedpreferences.contains(SortPicsByNameKey) ||
                 !sharedpreferences.contains(SortPicsByNameAscKey) ||
                 !sharedpreferences.contains(SortPicsByDateAscKey)){
-            SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putBoolean(SortPicsByNameKey, true);
             editor.putBoolean(SortPicsByNameAscKey, true);
             editor.putBoolean(SortPicsByDateAscKey, false);
-            editor.apply();
         }
+
+        editor.putBoolean(RefreshAll, false);
+
+        if (sharedpreferences.contains(LastStartup)) {
+            Date now = Calendar.getInstance().getTime();
+            String lastStartup = sharedpreferences.getString(LastStartup, now.toString());
+            Date lastStartupDate = Calendar.getInstance().getTime();
+            try {
+                lastStartupDate = new SimpleDateFormat().parse(lastStartup);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long diff = now.getTime() - lastStartupDate.getTime();
+            if (diff >= 3600000) {
+                editor.putBoolean(RefreshAll, true);
+            }
+        } else {
+            editor.putBoolean(RefreshAll, true);
+        }
+
+        editor.putString(LastStartup, Calendar.getInstance().getTime().toString());
+        editor.apply();
 
         pasarAGalleryFrag();
     }
