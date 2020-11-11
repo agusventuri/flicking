@@ -27,6 +27,7 @@ import com.baccaventuri.flicking.Models.Comment;
 import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.PhotoAdapter;
+import com.baccaventuri.flicking.R;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
 import com.google.gson.Gson;
@@ -73,9 +74,6 @@ public class DataProvider {
 
     public Context context;
 
-    private String galery =
-            "https://www.flickr.com/services/rest/?method=flickr.galleries.getList&api_key=6e69c76253dbd558d5bcb0e797676a69&user_id=36587311%40N08&continuation=0&short_limit=2&format=json&nojsoncallback=1";
-
     public void loadGalleriaUsuario(GalleryAdapter mGalleriesAdapter, Toolbar albumToolbar, FragmentActivity activity) {
 
         this.mGalleriesAdapter = mGalleriesAdapter;
@@ -92,7 +90,7 @@ public class DataProvider {
                     }
                 }
                 if (mAlbumViewModel.isEmpty() || refreshAll) {
-                    Toast.makeText(activity, "Descargando galería...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, activity.getString(R.string.downloadingGallery), Toast.LENGTH_SHORT).show();
                     fetchGalleriaUsuario();
                 }
                 mGalleriesAdapter.updateDataset(albums);
@@ -117,7 +115,7 @@ public class DataProvider {
                 }
 
                 if (mPhotoViewModel.isEmpty() || refreshAll) {
-                    Toast.makeText(activity, "Descargando album...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, activity.getString(R.string.downloadingAlbum), Toast.LENGTH_SHORT).show();
                     fetchPhotoset(album);
                 }
 
@@ -140,7 +138,7 @@ public class DataProvider {
         String url = "https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=" +
                 album.getId()+
                 "&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1";
-        // https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e69c76253dbd558d5bcb0e797676a69&photoset_id=72157628042948461&user_id=36587311%40N08&media=photos&format=json&nojsoncallback=1
+
         StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotosLoaded, onGetPhotosError);
         Flicking.getSharedQueue().add(request);
     }
@@ -265,15 +263,10 @@ public class DataProvider {
 
     //carga de fechas
     public void fetchDates(Photo photo) {
-
-        StringBuilder url = new StringBuilder();
-        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=");
-        url.append(photo.getId());
-        url.append("&format=json&nojsoncallback=1");
-        String a;
-        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
-
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), onGetPhotoInfoLoaded, onGetPhotoInfoError);
+        String url = "https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=" +
+                photo.getId() +
+                "&format=json&nojsoncallback=1";
+        StringRequest request = new StringRequest(Request.Method.GET, url, onGetPhotoInfoLoaded, onGetPhotoInfoError);
         Flicking.getSharedQueue().add(request);
     }
 
@@ -312,9 +305,6 @@ public class DataProvider {
     public void fetchBitmap(Photo photo) {
 
         StringBuilder url = new StringBuilder();
-        String a;
-        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
-
         url.append("https://live.staticflickr.com/");
         url.append(photo.getServer());
         url.append("/");
@@ -322,9 +312,6 @@ public class DataProvider {
         url.append("_");
         url.append(photo.getSecret());
         url.append(".jpg");
-
-        // https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg
-
 
         ImageLoader imageLoader = Flicking.getImageLoader();
         imageLoader.get(url.toString(), new ImageLoader.ImageListener() {
@@ -350,8 +337,6 @@ public class DataProvider {
     public void fetchBitmap(Album album) {
 
         StringBuilder url = new StringBuilder();
-        String a;
-        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
 
         url.append("https://live.staticflickr.com/");
         url.append(album.getServer());
@@ -360,9 +345,6 @@ public class DataProvider {
         url.append("_");
         url.append(album.getSecret());
         url.append(".jpg");
-
-        // https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg
-
 
         ImageLoader imageLoader = Flicking.getImageLoader();
         imageLoader.get(url.toString(), new ImageLoader.ImageListener() {
@@ -401,8 +383,7 @@ public class DataProvider {
             fos.flush();
             fos.close();
 
-            File mFile= new File(this.context.getFilesDir().getAbsolutePath(), fileName + ".jpg");
-            return mFile;
+            return new File(this.context.getFilesDir().getAbsolutePath(), fileName + ".jpg");
         }
         catch (IOException e) {
             e.printStackTrace();

@@ -226,9 +226,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
         Uri imageUri = Uri.parse("content://" + "com.tdam.contentprovider.PhotoProvider" + File.separator + "Photos" + File.separator + frag.photo.getBitmapUri());
         shareIntent.setAction(Intent.ACTION_SEND);
-        //Target whatsapp:
-        // shareIntent.setPackage("com.whatsapp");
-        //Add Image URI
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(shareIntent);

@@ -21,4 +21,6 @@
     <string name="offline">No se ha podido establecer conexión a internet</string>
     <string name="offlineGallery">La galería cargada podría no estar actualizada</string>
     <string name="offlineAlbum">El álbum cargado podría no estar actualizado</string>
+    <string name="downloadingAlbum">Descargando album…</string>
+    <string name="downloadingGallery">Descargando galería…</string>
 </resources>
