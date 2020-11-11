@@ -24,8 +24,6 @@ import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Comment;
 import com.baccaventuri.flicking.Models.Gallery;
 import com.baccaventuri.flicking.Models.Photo;
-import com.baccaventuri.flicking.Models.Size;
-import com.baccaventuri.flicking.Models.Sizes;
 import com.baccaventuri.flicking.PhotoAdapter;
 import com.baccaventuri.flicking.ViewModels.AlbumViewModel;
 import com.baccaventuri.flicking.ViewModels.PhotoViewModel;
@@ -81,10 +79,7 @@ public class DataProvider {
             public void onChanged(@Nullable final List<Album> albums) {
                 for (Album album:albums) {
                     if (album.getBitmap() == null) {
-                        //fetchBipmap(album.getPrimary());
-                        album.fetchBitmap(mGalleriesAdapter);
-                        mAlbumViewModel.update(album);
-                        String a = "a";
+                        fetchBitmap(album);
                     }
                 }
                 if (mAlbumViewModel.isEmpty()) {
@@ -202,11 +197,8 @@ public class DataProvider {
             mGalleriesAdapter.updateDataset(albums);
 
             for (Album album:albums) {
-                mAlbumViewModel.insert(album);
-
                 if (album.getBitmap() == null) {
-                    //fetchBipmap(album.getPrimary());
-                    album.fetchBitmap(mGalleriesAdapter);
+                    fetchBitmap(album);
                 }
             }
         }
@@ -288,7 +280,6 @@ public class DataProvider {
             Date created = null;
             //2011-09-17 18:22:44
             try {
-//                created = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2011-09-17 18:22:44");
                 String taken = dates.getAsJsonObject().get("taken").toString();
                 created = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(taken.replace("\"", ""));
             } catch (ParseException e) {
@@ -338,9 +329,47 @@ public class DataProvider {
                     File f = createCachedFile(photo.getId(), bitmap);
                     photo.setBitmapUri(Uri.fromFile(f).toString());
                     photo.setBitmap(bitmap);
-                    Log.d("UURI", photo.getBitmapUri());
                     mPhotoViewModel.insert(photo);
                     mAlbumsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    public void fetchBitmap(Album album) {
+
+        StringBuilder url = new StringBuilder();
+        String a;
+        a= "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6e69c76253dbd558d5bcb0e797676a69&photo_id=6895430587&format=json&nojsoncallback=1";
+
+        url.append("https://live.staticflickr.com/");
+        url.append(album.getServer());
+        url.append("/");
+        url.append(album.getPrimary());
+        url.append("_");
+        url.append(album.getSecret());
+        url.append(".jpg");
+
+        // https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg
+
+
+        ImageLoader imageLoader = Flicking.getImageLoader();
+        imageLoader.get(url.toString(), new ImageLoader.ImageListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                assert true;
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+                if (response.getBitmap() != null) {
+                    Bitmap bitmap = response.getBitmap();
+                    File f = createCachedFile(album.getId(), bitmap);
+                    album.setUriPrimary(Uri.fromFile(f).toString());
+                    album.setBitmap(bitmap);
+                    Log.d("UURI", album.getUriPrimary());
+                    mAlbumViewModel.insert(album);
+                    mGalleriesAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -370,29 +399,4 @@ public class DataProvider {
         return null;
     }
 
-
-    /*public void showPrimaryImage(Gallery gallery, ImageView view){
-        String photoId = gallery.getPages();
-
-        StringBuilder url = new StringBuilder();
-        url.append("https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=");
-        url.append("6e69c76253dbd558d5bcb0e797676a69");
-        url.append("&photo_id=");
-        url.append(photoId);
-        url.append("&format=json&nojsoncallback=1");
-
-
-        ImageLoader imageLoader = VolleyCatcher.getImgLoader();
-        imageLoader.get(url.toString(), new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                view.setImageBitmap(response.getBitmap());
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }*/
 }

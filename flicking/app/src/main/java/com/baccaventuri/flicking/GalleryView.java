@@ -3,7 +3,6 @@ package com.baccaventuri.flicking;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,37 +25,18 @@ import java.util.List;
  */
 public class GalleryView extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     private RecyclerView albumRecyclerView;
     private GalleryAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private List<Album> albums;
-    private Gallery gallery;
     MainActivity activity;
+    DataProvider dataProvider;
 
     public GalleryView(MainActivity activity) {
         // Required empty public constructor
         this.activity = activity;
     }
 
-    // TODO: Rename and change types and number of parameters
-   /* public static AlbumView newInstance(String param1, String param2) {
-        AlbumView fragment = new AlbumView();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,17 +50,11 @@ public class GalleryView extends Fragment {
             mNotificationUtils.getManager().notify(101, nb.build());
         }
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
 
 
-        mAdapter = new GalleryAdapter(getContext(), albums, activity);
-
-        DataProvider dataProvider = new DataProvider();
+        mAdapter = new GalleryAdapter(getContext(), null, activity);
         dataProvider.loadGalleriaUsuario(mAdapter, toolbar, getActivity());
     }
 
@@ -108,5 +82,9 @@ public class GalleryView extends Fragment {
 
     public boolean onBackPressed() {
         return true;
+    }
+
+    public void setDataProvider(DataProvider dp) {
+        this.dataProvider = dp;
     }
 }

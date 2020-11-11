@@ -5,35 +5,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Photo;
 import com.baccaventuri.flicking.Models.Album;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.net.URI;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AlbumsAdapter.PhotoClickListener, GalleryAdapter.AlbumClickListener {
@@ -42,34 +28,17 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     public static final String SortPicsByNameKey = "SortPicsByName";
     public static final String SortPicsByNameAscKey = "SortPicsByNameAsc";
     public static final String SortPicsByDateAscKey = "SortPicsByDateAsc";
+    public DataProvider dp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        dp = new DataProvider();
+        dp.setContext(getApplicationContext());
 
-
-        /*final EditText editTextTitleAndroid = (EditText) findViewById(R.id.et_android_title);
-        final EditText editTextAuthorAndroid = (EditText) findViewById(R.id.et_android_author);
-        Button buttonAndroid = (Button) findViewById(R.id.btn_send_android);
-
-        buttonAndroid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String title = editTextTitleAndroid.getText().toString();
-                String author = editTextAuthorAndroid.getText().toString();
-
-                if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
-                    Notification.Builder nb = mNotificationUtils.
-                            getAndroidChannelNotification(title, "By " + author);
-
-                    mNotificationUtils.getManager().notify(101, nb.build());
-                }
-            }
-        });*/
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         sharedpreferences = getSharedPreferences(sortPref,
@@ -104,10 +73,9 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     }
 
     public void pasarAalbumFrag (Album album) {
-        Context context = getApplicationContext();
-
         // Create fragment and give it an argument for the selected article
         AlbumView newFragment = new AlbumView(album,this);
+        newFragment.setDataProvider(dp);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -122,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
 
         // Create fragment and give it an argument for the selected article
         GalleryView newFragment = new GalleryView(this);
+        newFragment.setDataProvider(dp);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -182,7 +151,8 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         editor.apply();
         //actualizo fragment album
         AlbumView frag = (AlbumView) getSupportFragmentManager().findFragmentByTag("ALBUM");
-        if (frag !=null){
+        if (frag != null){
+            frag.setDataProvider(dp);
             frag.onResume();
         }
     }
@@ -253,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
 
         if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
-            //Toast.makeText(context, "No Internet connection!", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

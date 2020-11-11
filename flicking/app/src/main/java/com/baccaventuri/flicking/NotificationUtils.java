@@ -7,15 +7,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
 
-import androidx.core.app.NotificationCompat;
-
 public class NotificationUtils extends ContextWrapper {
 
     private NotificationManager mManager;
     public static final String ANDROID_CHANNEL_ID = "com.chikeandroid.tutsplustalerts.ANDROID";
-    public static final String IOS_CHANNEL_ID = "com.chikeandroid.tutsplustalerts.IOS";
     public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
-    public static final String IOS_CHANNEL_NAME = "IOS CHANNEL";
 
     public NotificationUtils(Context base) {
         super(base);
@@ -37,15 +33,6 @@ public class NotificationUtils extends ContextWrapper {
         androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
         getManager().createNotificationChannel(androidChannel);
-
-        // create ios channel
-        NotificationChannel iosChannel = new NotificationChannel(IOS_CHANNEL_ID,
-                IOS_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        iosChannel.enableLights(true);
-        iosChannel.enableVibration(true);
-        iosChannel.setLightColor(Color.GRAY);
-        iosChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-        getManager().createNotificationChannel(iosChannel);
     }
 
     public NotificationManager getManager() {
@@ -59,16 +46,7 @@ public class NotificationUtils extends ContextWrapper {
         return new Notification.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                //.setSmallIcon(android.R.drawable.stat_notify_more)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setAutoCancel(true);
-    }
-
-    public Notification.Builder getIosChannelNotification(String title, String body) {
-        return new Notification.Builder(getApplicationContext(), IOS_CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setSmallIcon(android.R.drawable.stat_notify_more)
                 .setAutoCancel(true);
     }
 }

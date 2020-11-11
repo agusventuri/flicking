@@ -1,33 +1,9 @@
 package com.baccaventuri.flicking.Models;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.StringRequest;
-import com.baccaventuri.flicking.AlbumsAdapter;
-import com.baccaventuri.flicking.Data.DataProvider;
-import com.baccaventuri.flicking.Flicking;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.util.Log;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -50,9 +26,6 @@ public class Photo {
     @SerializedName("isprimary")
     @Expose
     private String isprimary;
-
-    @Ignore
-    private List<Size> size;
 
     @Ignore
     private Bitmap bitmap;
@@ -78,12 +51,6 @@ public class Photo {
     private String photoset;
 
     @ForeignKey(entity = Album.class, parentColumns = "id", childColumns = "id_photoset")
-
-    @Ignore
-    private AlbumsAdapter mAdapter;
-
-    @Ignore
-    private Context context;
 
     @NonNull
     public String getId() {
