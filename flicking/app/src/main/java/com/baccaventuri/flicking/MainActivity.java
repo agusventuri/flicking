@@ -5,18 +5,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,6 +47,27 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+
+
+        /*final EditText editTextTitleAndroid = (EditText) findViewById(R.id.et_android_title);
+        final EditText editTextAuthorAndroid = (EditText) findViewById(R.id.et_android_author);
+        Button buttonAndroid = (Button) findViewById(R.id.btn_send_android);
+
+        buttonAndroid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String title = editTextTitleAndroid.getText().toString();
+                String author = editTextAuthorAndroid.getText().toString();
+
+                if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
+                    Notification.Builder nb = mNotificationUtils.
+                            getAndroidChannelNotification(title, "By " + author);
+
+                    mNotificationUtils.getManager().notify(101, nb.build());
+                }
+            }
+        });*/
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -80,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         Context context = getApplicationContext();
 
         // Create fragment and give it an argument for the selected article
-        AlbumView newFragment = new AlbumView(album);
+        AlbumView newFragment = new AlbumView(album,this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -219,5 +246,16 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Pho
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(shareIntent);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            //Toast.makeText(context, "No Internet connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 }

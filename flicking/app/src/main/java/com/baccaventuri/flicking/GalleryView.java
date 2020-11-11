@@ -1,6 +1,7 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,6 +60,16 @@ public class GalleryView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!activity.isOnline()) {
+            NotificationUtils mNotificationUtils = new NotificationUtils(activity);
+
+            Notification.Builder nb = mNotificationUtils.
+                    getAndroidChannelNotification("No se ha podido establecer conexión a internet",
+                            "La galería cargada podría no estar actualizada");
+
+            mNotificationUtils.getManager().notify(101, nb.build());
+        }
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

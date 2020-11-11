@@ -1,15 +1,21 @@
 package com.baccaventuri.flicking;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.provider.SyncStateContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,8 @@ import android.view.ViewGroup;
 import com.baccaventuri.flicking.Data.DataProvider;
 import com.baccaventuri.flicking.Models.Album;
 import com.baccaventuri.flicking.Models.Photo;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.SharedPreferences;
 
 import java.util.List;
@@ -55,11 +63,13 @@ public class AlbumView extends Fragment {
     private Boolean orderByName;
     private Boolean asc;
 
-    public AlbumView(Album album) {
+    public AlbumView(Album album, MainActivity activity) {
         // Required empty public constructor
         this.album = album;
         this.photos = album.getPhoto();
+        this.activity = activity;
     }
+
 
     // TODO: Rename and change types and number of parameters
    /* public static AlbumView newInstance(String param1, String param2) {
@@ -74,18 +84,16 @@ public class AlbumView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        if (!activity.isOnline()) {
+            NotificationUtils mNotificationUtils = new NotificationUtils(activity);
+
+            Notification.Builder nb = mNotificationUtils.
+                    getAndroidChannelNotification("No se ha podido establecer conexión a internet",
+                            "El álbum cargado podría no estar actualizado");
+
+            mNotificationUtils.getManager().notify(101, nb.build());
         }
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_album);
-
-        //preferencias para ordenamiento
-        sharedpreferences = getActivity().getSharedPreferences(sortPref,
-                Context.MODE_PRIVATE);
-
-        mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
+        cargarFotos();
 
     }
 
@@ -133,6 +141,21 @@ public class AlbumView extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_album_view, container, false);
+    }
+
+    public void cargarFotos (){
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_album);
+
+        //preferencias para ordenamiento
+        sharedpreferences = getActivity().getSharedPreferences(sortPref,
+                Context.MODE_PRIVATE);
+
+        mAdapter = new AlbumsAdapter(getContext(), photos,(AlbumsAdapter.PhotoClickListener) this.getActivity());
     }
 
 }
